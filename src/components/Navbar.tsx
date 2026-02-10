@@ -18,26 +18,39 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-foreground bg-background">
-      <div className="container flex h-14 items-center justify-between">
-        <Link to="/" className="font-serif text-xl font-bold tracking-tight">
-          JITSIE
+    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-foreground/10">
+      <div className="container flex h-12 items-center justify-between">
+        <Link to="/" className="flex items-center gap-2">
+          <div className="h-6 w-6 bg-accent flex items-center justify-center">
+            <span className="text-accent-foreground text-xs font-bold">J</span>
+          </div>
+          <span className="font-serif text-lg font-bold tracking-tight">JITSIE</span>
         </Link>
 
         {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-6">
+        <nav className="hidden md:flex items-center gap-1">
           {navLinks.map((l) => (
-            <Link key={l.to} to={l.to} className="text-sm font-medium hover:text-accent transition-colors">
+            <Link
+              key={l.to}
+              to={l.to}
+              className="text-[13px] font-medium px-3 py-1.5 hover:text-accent transition-colors"
+            >
               {l.label}
             </Link>
           ))}
+          <div className="h-4 w-px bg-foreground/20 mx-2" />
           {user ? (
-            <Button variant="outline" size="sm" onClick={signOut} className="border-foreground">
+            <button
+              onClick={signOut}
+              className="text-[13px] font-medium px-3 py-1.5 text-muted-foreground hover:text-foreground transition-colors"
+            >
               Logout
-            </Button>
+            </button>
           ) : (
             <Link to="/login">
-              <Button variant="outline" size="sm" className="border-foreground">Login</Button>
+              <Button size="sm" className="h-7 px-3 text-xs bg-foreground text-background hover:bg-foreground/90">
+                Login
+              </Button>
             </Link>
           )}
         </nav>
@@ -45,25 +58,36 @@ export default function Navbar() {
         {/* Mobile nav */}
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild className="md:hidden">
-            <Button variant="ghost" size="icon">
-              <Menu className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="h-8 w-8">
+              <Menu className="h-4 w-4" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="bg-background">
+          <SheetContent side="right" className="bg-background w-64">
             <SheetTitle className="font-serif text-lg">Menu</SheetTitle>
-            <nav className="flex flex-col gap-4 mt-6">
+            <nav className="flex flex-col gap-1 mt-6">
               {navLinks.map((l) => (
-                <Link key={l.to} to={l.to} className="text-lg font-medium" onClick={() => setOpen(false)}>
+                <Link
+                  key={l.to}
+                  to={l.to}
+                  className="text-sm font-medium py-2 px-3 hover:bg-secondary transition-colors"
+                  onClick={() => setOpen(false)}
+                >
                   {l.label}
                 </Link>
               ))}
+              <div className="h-px bg-foreground/10 my-2" />
               {user ? (
-                <Button variant="outline" onClick={() => { signOut(); setOpen(false); }} className="border-foreground">
+                <button
+                  onClick={() => { signOut(); setOpen(false); }}
+                  className="text-sm font-medium py-2 px-3 text-left text-muted-foreground hover:text-foreground"
+                >
                   Logout
-                </Button>
+                </button>
               ) : (
                 <Link to="/login" onClick={() => setOpen(false)}>
-                  <Button variant="outline" className="w-full border-foreground">Login</Button>
+                  <Button size="sm" className="w-full bg-foreground text-background hover:bg-foreground/90">
+                    Login
+                  </Button>
                 </Link>
               )}
             </nav>
