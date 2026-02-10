@@ -14,16 +14,297 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      articles: {
+        Row: {
+          author: string | null
+          content: string | null
+          cover_image: string | null
+          created_at: string
+          id: string
+          published_at: string | null
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author?: string | null
+          content?: string | null
+          cover_image?: string | null
+          created_at?: string
+          id?: string
+          published_at?: string | null
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string | null
+          content?: string | null
+          cover_image?: string | null
+          created_at?: string
+          id?: string
+          published_at?: string | null
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      companies: {
+        Row: {
+          batch: string | null
+          created_at: string
+          description: string | null
+          founder_id: string | null
+          id: string
+          industry: string | null
+          logo_url: string | null
+          name: string
+          one_liner: string | null
+          slug: string
+          status: Database["public"]["Enums"]["company_status"]
+          updated_at: string
+          website_url: string | null
+        }
+        Insert: {
+          batch?: string | null
+          created_at?: string
+          description?: string | null
+          founder_id?: string | null
+          id?: string
+          industry?: string | null
+          logo_url?: string | null
+          name: string
+          one_liner?: string | null
+          slug: string
+          status?: Database["public"]["Enums"]["company_status"]
+          updated_at?: string
+          website_url?: string | null
+        }
+        Update: {
+          batch?: string | null
+          created_at?: string
+          description?: string | null
+          founder_id?: string | null
+          id?: string
+          industry?: string | null
+          logo_url?: string | null
+          name?: string
+          one_liner?: string | null
+          slug?: string
+          status?: Database["public"]["Enums"]["company_status"]
+          updated_at?: string
+          website_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "companies_founder_id_fkey"
+            columns: ["founder_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          cover_image: string | null
+          created_at: string
+          date_time: string
+          id: string
+          location: string | null
+          registration_link: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          cover_image?: string | null
+          created_at?: string
+          date_time: string
+          id?: string
+          location?: string | null
+          registration_link?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          cover_image?: string | null
+          created_at?: string
+          date_time?: string
+          id?: string
+          location?: string | null
+          registration_link?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      jobs: {
+        Row: {
+          apply_link: string | null
+          category: string | null
+          company_id: string
+          created_at: string
+          id: string
+          location: string | null
+          salary_range: string | null
+          title: string
+          type: Database["public"]["Enums"]["job_type"]
+          updated_at: string
+        }
+        Insert: {
+          apply_link?: string | null
+          category?: string | null
+          company_id: string
+          created_at?: string
+          id?: string
+          location?: string | null
+          salary_range?: string | null
+          title: string
+          type?: Database["public"]["Enums"]["job_type"]
+          updated_at?: string
+        }
+        Update: {
+          apply_link?: string | null
+          category?: string | null
+          company_id?: string
+          created_at?: string
+          id?: string
+          location?: string | null
+          salary_range?: string | null
+          title?: string
+          type?: Database["public"]["Enums"]["job_type"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "jobs_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: false
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      news_updates: {
+        Row: {
+          created_at: string
+          id: string
+          link: string | null
+          text: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          link?: string | null
+          text: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          link?: string | null
+          text?: string
+        }
+        Relationships: []
+      }
+      partners: {
+        Row: {
+          category: Database["public"]["Enums"]["partner_category"]
+          created_at: string
+          id: string
+          logo_url: string | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          category?: Database["public"]["Enums"]["partner_category"]
+          created_at?: string
+          id?: string
+          logo_url?: string | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["partner_category"]
+          created_at?: string
+          id?: string
+          logo_url?: string | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          is_verified: boolean
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          is_verified?: boolean
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          is_verified?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_roles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "founder" | "user"
+      company_status: "active" | "acquired"
+      job_type: "intern" | "full_time"
+      partner_category: "vc" | "corporate"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +431,11 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "founder", "user"],
+      company_status: ["active", "acquired"],
+      job_type: ["intern", "full_time"],
+      partner_category: ["vc", "corporate"],
+    },
   },
 } as const
