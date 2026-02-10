@@ -1,110 +1,124 @@
 
 
-# Startup Openings Page — Implementation Plan
+# Board Members and Startup Advisors — Implementation Plan
 
 ## What We're Building
 
-A new **"Startup Openings"** page at `/openings` that showcases hiring opportunities from JITSIE ecosystem startups. This is distinct from the existing Jobs Board — it focuses on startup-specific roles with richer metadata extracted from the JITSIE report (sectors like EdTech, FinTech, SaaS, BioTech, SpaceTech, etc.).
+Two new database tables to store rich profiles for **Board Members** and **Startup Advisors**, displayed on the existing `/team` page in distinct sections. Each person will have a full bio, role/designation, LinkedIn URL, photo, and other relevant details.
 
 ---
 
-## Step 1: Database — New `startup_openings` Table
+## Step 1: Database — Two New Tables
 
-Create a dedicated table to hold startup-specific openings with richer fields than the generic `jobs` table:
+### Table: `board_members`
 
-**Table: `startup_openings`**
 | Column | Type | Notes |
 |--------|------|-------|
 | id | uuid (PK) | Default: gen_random_uuid() |
-| startup_name | text | Name of the startup |
-| startup_slug | text | Links to company if exists |
-| role_title | text | Position title |
-| description | text | Role description |
-| sector | text | e.g. EdTech, FinTech, AI/ML, BioTech |
-| stage | text | e.g. Pre-Seed, Seed, Series A |
-| location | text | City or Remote |
-| stipend_salary | text | Range or fixed |
-| type | text | intern / full_time / co_founder / freelance |
-| apply_link | text | External URL |
+| full_name | text | Required |
+| designation | text | e.g. "Chairperson", "Director", "Trustee" |
+| bio | text | Short biography |
+| avatar_url | text | Profile photo URL |
+| linkedin_url | text | LinkedIn profile link |
+| organization | text | Their affiliated org/company |
+| display_order | integer | Controls sort order on page |
 | is_active | boolean | Default true |
-| posted_at | timestamptz | Default now() |
 | created_at | timestamptz | Default now() |
 | updated_at | timestamptz | Default now() |
 
-**RLS**: Public SELECT, admin-only INSERT/UPDATE/DELETE (same pattern as all other tables).
+### Table: `startup_advisors`
+
+| Column | Type | Notes |
+|--------|------|-------|
+| id | uuid (PK) | Default: gen_random_uuid() |
+| full_name | text | Required |
+| designation | text | e.g. "Mentor", "Industry Advisor", "EIR" |
+| bio | text | Short biography |
+| avatar_url | text | Profile photo URL |
+| linkedin_url | text | LinkedIn profile link |
+| organization | text | Their affiliated org/company |
+| expertise | text | Area of expertise (e.g. "AI/ML", "Growth Strategy") |
+| display_order | integer | Controls sort order on page |
+| is_active | boolean | Default true |
+| created_at | timestamptz | Default now() |
+| updated_at | timestamptz | Default now() |
+
+### RLS Policies (both tables)
+- Public `SELECT` — anyone can view
+- Admin-only `INSERT`, `UPDATE`, `DELETE`
 
 ---
 
-## Step 2: Seed Data from JITSIE Report
+## Step 2: Seed Data
 
-Populate with ~20 realistic openings based on the report's ecosystem (200+ startups across EdTech, FinTech, SaaS, BioTech, SpaceTech, DeepTech, Sustainability, FoodTech, Tourism, Consulting, ERP):
+### Board Members (~6-8 entries)
+Realistic board-level profiles for the JITSIE ecosystem, e.g.:
+- **Dr. Kamakoti V** — Chairperson, Director of IIT Madras
+- **Prof. Ashok Jhunjhunwala** — Board Member, Institute Professor at IIT Madras
+- **Rajan Anandan** — Board Member, Managing Director at Sequoia Capital India
+- Additional members with designations like Trustee, Independent Director, etc.
 
-Examples:
-- **AgniKul Cosmos** — Propulsion Engineer Intern (SpaceTech, Pre-Seed, Chennai)
-- **NeuralForge AI** — ML Research Intern (AI/ML, Seed, Remote)
-- **GreenGrid Energy** — Frontend Developer (CleanTech, Seed, Bangalore)
-- **EduNex** — Content Strategist (EdTech, Pre-Seed, Remote)
-- **BioSynth Labs** — Lab Research Associate (BioTech, Seed, Chennai)
-- **PayStack India** — Growth Marketing Intern (Fintech, Series A, Mumbai)
-- Various JITSIE-ecosystem startups in Consulting, SaaS, FoodTech, etc.
-
-Also seed additional companies, more news_updates, articles, and events referencing data from the report (Pitch Fest 2024, Becoming Billionaire 2025, PIWOT 2025, etc.).
+### Startup Advisors (~8-10 entries)
+Mentors and industry experts, e.g.:
+- **Sridhar Vembu** — Industry Advisor, CEO of Zoho Corporation (expertise: SaaS, Product)
+- **Kris Gopalakrishnan** — Senior Advisor, Co-founder of Infosys (expertise: Enterprise, Scaling)
+- **Padmaja Ruparel** — Mentor, Co-founder of Indian Angel Network (expertise: Fundraising, VC)
+- Additional advisors across AI/ML, DeepTech, BioTech, FinTech, etc.
 
 ---
 
-## Step 3: Frontend — Startup Openings Page (`/openings`)
+## Step 3: Frontend — Redesigned Team Page
 
-### Design
-Follows the existing YC/newspaper aesthetic with the bone background, Newsreader headings, and 1px borders.
+The existing `/team` page will be restructured into three clear sections:
 
 ### Layout
-- **Header**: "Startup Openings" in large serif, subtitle with count of active openings
-- **Filter Bar**: Chips for sector (All, AI/ML, FinTech, EdTech, DeepTech, etc.), type (All, Intern, Full-Time, Co-Founder), and stage (All, Pre-Seed, Seed, Series A)
-- **Cards Grid**: Each opening displayed as a card with:
-  - Startup name + sector badge
-  - Role title (serif, bold)
-  - Location, stipend, stage as metadata
-  - "Apply" button (black bg, white text)
-  - Posted date in relative format
 
-### Mobile
-- Filters scroll horizontally
-- Cards stack single-column
+1. **Board Members** section
+   - Section heading: "Board of Directors" with a subtitle
+   - Larger cards in a 2-3 column grid
+   - Each card shows: photo (grayscale, color on hover), name, designation, organization, short bio excerpt, and a LinkedIn icon-link
 
----
+2. **Startup Advisors** section
+   - Section heading: "Advisors & Mentors"
+   - Similar card grid (3-4 columns)
+   - Each card shows: photo, name, designation, organization, expertise badge, bio excerpt, LinkedIn link
 
-## Step 4: Hook & Routing
+3. **Team Members** section (existing profiles data, kept as-is at the bottom)
+   - Section heading: "Core Team"
+   - Current grid layout preserved
 
-- Create `src/hooks/useStartupOpenings.ts` — TanStack Query hook with sector/type/stage filters
-- Add TypeScript type `StartupOpening` to `src/lib/types.ts`
-- Add route `/openings` in `App.tsx`
-- Add "Openings" link to the Navbar
+### Card Design
+- YC/newspaper aesthetic: 1px borders, bone background, serif headings
+- Hover effect: grayscale-to-color photo, subtle border highlight
+- LinkedIn shown as a small icon in the corner of each card
 
 ---
 
-## Step 5: Additional Data Seeding
+## Step 4: Data Fetching
 
-Based on the report, also seed:
-- **More events**: Pitch Fest 2024, START-A-THON, Bengaluru Bootcamp, PIWOT 2025, Becoming Billionaire 2025, Panel Discussion at TTJA
-- **More news_updates**: STPI incubation, Wadhwani LiftOff, Polygon Labs partnership, PanIIT collaboration
-- **More partners**: Wadhwani Foundation, STPI, RVEI, KaroStartup, Uniqorn Growth Partners, Polygon Labs, PanIIT Alumni India
+### New Hooks
+- `useBoardMembers()` — fetches from `board_members` table, ordered by `display_order`, filtered by `is_active`
+- `useStartupAdvisors()` — fetches from `startup_advisors` table, ordered by `display_order`, filtered by `is_active`
+
+### New Types in `src/lib/types.ts`
+- `BoardMember` interface
+- `StartupAdvisor` interface
 
 ---
 
 ## Technical Details
 
 ### Files to Create
-- `src/pages/StartupOpenings.tsx` — Main page component
-- `src/hooks/useStartupOpenings.ts` — Data fetching hook
+- None (hooks will be added to existing `useProfiles.ts`)
 
 ### Files to Modify
-- `src/lib/types.ts` — Add `StartupOpening` interface
-- `src/App.tsx` — Add `/openings` route
-- `src/components/Navbar.tsx` — Add "Openings" nav link
+- `src/hooks/useProfiles.ts` — Add `useBoardMembers()` and `useStartupAdvisors()` hooks
+- `src/lib/types.ts` — Add `BoardMember` and `StartupAdvisor` interfaces
+- `src/pages/Team.tsx` — Redesign with three sections
 
 ### Migration
 Single SQL migration covering:
-1. `startup_openings` table creation with RLS
-2. INSERT ~20 openings
-3. INSERT additional events, partners, and news_updates from the report
-
+1. Create `board_members` table with RLS
+2. Create `startup_advisors` table with RLS
+3. Seed ~6-8 board members
+4. Seed ~8-10 advisors
