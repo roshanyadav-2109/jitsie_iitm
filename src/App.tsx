@@ -14,6 +14,7 @@ import Team from "./pages/Team";
 import Events from "./pages/Events";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import StartupOpenings from "./pages/StartupOpenings";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/companies" element={<Companies />} />
             <Route path="/companies/:slug" element={<CompanyDetail />} />
             <Route path="/jobs" element={<Jobs />} />
+            <Route path="/openings" element={<StartupOpenings />} />
             <Route path="/library" element={<Library />} />
             <Route path="/library/:slug" element={<ArticleDetail />} />
             <Route path="/team" element={<Team />} />

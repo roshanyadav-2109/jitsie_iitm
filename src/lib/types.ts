@@ -88,3 +88,21 @@ export interface NewsUpdate {
   link: string | null;
   created_at: string;
 }
+
+export interface StartupOpening {
+  id: string;
+  startup_name: string;
+  startup_slug: string | null;
+  role_title: string;
+  description: string | null;
+  sector: string | null;
+  stage: string | null;
+  location: string | null;
+  stipend_salary: string | null;
+  type: string;
+  apply_link: string | null;
+  is_active: boolean;
+  posted_at: string;
+  created_at: string;
+  updated_at: string;
+}

@@ -261,6 +261,60 @@ export type Database = {
         }
         Relationships: []
       }
+      startup_openings: {
+        Row: {
+          apply_link: string | null
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          location: string | null
+          posted_at: string
+          role_title: string
+          sector: string | null
+          stage: string | null
+          startup_name: string
+          startup_slug: string | null
+          stipend_salary: string | null
+          type: string
+          updated_at: string
+        }
+        Insert: {
+          apply_link?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          location?: string | null
+          posted_at?: string
+          role_title: string
+          sector?: string | null
+          stage?: string | null
+          startup_name: string
+          startup_slug?: string | null
+          stipend_salary?: string | null
+          type?: string
+          updated_at?: string
+        }
+        Update: {
+          apply_link?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          location?: string | null
+          posted_at?: string
+          role_title?: string
+          sector?: string | null
+          stage?: string | null
+          startup_name?: string
+          startup_slug?: string | null
+          stipend_salary?: string | null
+          type?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
