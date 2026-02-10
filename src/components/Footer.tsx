@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 
 const footerLinks = [
   { to: '/companies', label: 'Directory' },
-  { to: '/jobs', label: 'Jobs' },
+  { to: '/partners', label: 'Partners' },
   { to: '/library', label: 'Library' },
   { to: '/events', label: 'Events' },
   { to: '/team', label: 'Team' },
