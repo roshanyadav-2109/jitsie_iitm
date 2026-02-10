@@ -50,6 +50,48 @@ export type Database = {
         }
         Relationships: []
       }
+      board_members: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          designation: string | null
+          display_order: number | null
+          full_name: string
+          id: string
+          is_active: boolean
+          linkedin_url: string | null
+          organization: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          designation?: string | null
+          display_order?: number | null
+          full_name: string
+          id?: string
+          is_active?: boolean
+          linkedin_url?: string | null
+          organization?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          designation?: string | null
+          display_order?: number | null
+          full_name?: string
+          id?: string
+          is_active?: boolean
+          linkedin_url?: string | null
+          organization?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       companies: {
         Row: {
           batch: string | null
@@ -257,6 +299,51 @@ export type Database = {
           full_name?: string | null
           id?: string
           is_verified?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      startup_advisors: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          designation: string | null
+          display_order: number | null
+          expertise: string | null
+          full_name: string
+          id: string
+          is_active: boolean
+          linkedin_url: string | null
+          organization: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          designation?: string | null
+          display_order?: number | null
+          expertise?: string | null
+          full_name: string
+          id?: string
+          is_active?: boolean
+          linkedin_url?: string | null
+          organization?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          designation?: string | null
+          display_order?: number | null
+          expertise?: string | null
+          full_name?: string
+          id?: string
+          is_active?: boolean
+          linkedin_url?: string | null
+          organization?: string | null
           updated_at?: string
         }
         Relationships: []

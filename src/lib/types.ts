@@ -89,6 +89,35 @@ export interface NewsUpdate {
   created_at: string;
 }
 
+export interface BoardMember {
+  id: string;
+  full_name: string;
+  designation: string | null;
+  bio: string | null;
+  avatar_url: string | null;
+  linkedin_url: string | null;
+  organization: string | null;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface StartupAdvisor {
+  id: string;
+  full_name: string;
+  designation: string | null;
+  bio: string | null;
+  avatar_url: string | null;
+  linkedin_url: string | null;
+  organization: string | null;
+  expertise: string | null;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface StartupOpening {
   id: string;
   startup_name: string;
