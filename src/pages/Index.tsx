@@ -1,15 +1,16 @@
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
-import { useNewsUpdates } from '@/hooks/useNewsUpdates';
+import { useGalleryImages } from '@/hooks/useGalleryImages';
 import { useCompanies } from '@/hooks/useCompanies';
-import { SkeletonRow } from '@/components/SkeletonCard';
-import { formatDistanceToNow } from 'date-fns';
-import { ExternalLink, ArrowRight, TrendingUp, Building2, Users } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { ArrowRight, TrendingUp, Building2, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 
 export default function Index() {
-  const { data: news, isLoading: newsLoading } = useNewsUpdates();
+  const { data: gallery, isLoading: galleryLoading } = useGalleryImages();
   const { data: companies } = useCompanies();
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   return (
     <Layout>
@@ -32,7 +33,7 @@ export default function Index() {
                 Explore Startups <ArrowRight className="h-4 w-4 ml-1" />
               </Button>
             </Link>
-            <Link to="/jobs">
+            <Link to="/openings">
               <Button variant="outline" className="border-foreground px-6 h-11 text-sm">
                 View Open Roles
               </Button>
@@ -89,54 +90,64 @@ export default function Index() {
         </section>
       )}
 
-      {/* News Feed */}
+      {/* Image Gallery */}
       <section className="py-16">
-        <div className="container max-w-3xl">
-          <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-serif font-bold">Latest Updates</h2>
+        <div className="container">
+          <div className="flex items-center justify-between mb-10">
+            <h2 className="text-2xl font-serif font-bold">From the Ecosystem</h2>
             <span className="text-xs text-muted-foreground uppercase tracking-widest">
-              News Feed
+              Gallery
             </span>
           </div>
-          <div className="border-t border-foreground">
-            {newsLoading ? (
-              <div className="space-y-0">
-                {Array.from({ length: 6 }).map((_, i) => (
-                  <SkeletonRow key={i} />
-                ))}
-              </div>
-            ) : news && news.length > 0 ? (
-              <ol className="divide-y divide-foreground/10">
-                {news.map((item, i) => (
-                  <li key={item.id} className="flex items-start gap-4 py-4 group">
-                    <span className="text-muted-foreground text-xs font-mono w-5 shrink-0 pt-0.5 text-right">
-                      {i + 1}.
-                    </span>
-                    <div className="flex-1 min-w-0">
-                      {item.link ? (
-                        <a
-                          href={item.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-sm leading-relaxed group-hover:text-accent transition-colors inline-flex items-start gap-1"
-                        >
-                          <span>{item.text}</span>
-                          <ExternalLink className="h-3 w-3 shrink-0 mt-1 opacity-40" />
-                        </a>
-                      ) : (
-                        <span className="text-sm leading-relaxed">{item.text}</span>
-                      )}
-                    </div>
-                    <span className="text-[11px] text-muted-foreground shrink-0 pt-0.5">
-                      {formatDistanceToNow(new Date(item.created_at), { addSuffix: true })}
-                    </span>
-                  </li>
-                ))}
-              </ol>
-            ) : (
-              <p className="text-muted-foreground text-sm py-8 text-center">No updates yet.</p>
-            )}
-          </div>
+
+          {galleryLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <Skeleton key={i} className="aspect-[4/3] w-full" />
+              ))}
+            </div>
+          ) : gallery && gallery.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {gallery.map((img) => (
+                <div
+                  key={img.id}
+                  className="group relative overflow-hidden border border-foreground/10 bg-card"
+                  onMouseEnter={() => setHoveredId(img.id)}
+                  onMouseLeave={() => setHoveredId(null)}
+                >
+                  <div className="aspect-[4/3] overflow-hidden">
+                    <img
+                      src={img.image_url}
+                      alt={img.title || 'Gallery image'}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+                  </div>
+                  {/* Overlay with title & caption */}
+                  <div
+                    className={`absolute inset-0 bg-foreground/60 flex flex-col justify-end p-5 transition-opacity duration-300 ${
+                      hoveredId === img.id ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  >
+                    {img.title && (
+                      <h3 className="text-background font-serif font-bold text-lg leading-tight">
+                        {img.title}
+                      </h3>
+                    )}
+                    {img.caption && (
+                      <p className="text-background/70 text-sm mt-1 leading-relaxed">
+                        {img.caption}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-muted-foreground text-sm py-8 text-center">
+              No gallery images yet.
+            </p>
+          )}
         </div>
       </section>
 

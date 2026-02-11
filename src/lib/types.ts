@@ -135,3 +135,14 @@ export interface StartupOpening {
   created_at: string;
   updated_at: string;
 }
+
+export interface GalleryImage {
+  id: string;
+  title: string | null;
+  caption: string | null;
+  image_url: string;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
