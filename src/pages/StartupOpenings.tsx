@@ -5,6 +5,13 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { SkeletonCard } from '@/components/SkeletonCard';
 import { Separator } from '@/components/ui/separator';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { MapPin, Banknote, Rocket, ExternalLink, Filter } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -24,7 +31,6 @@ export default function StartupOpenings() {
   const [type, setType] = useState('All');
   const [stage, setStage] = useState('All');
 
-  // Sync filters with backend query
   const filters = useMemo(() => ({
     ...(sector !== 'All' && { sector }),
     ...(type !== 'All' && { type }),
@@ -54,32 +60,42 @@ export default function StartupOpenings() {
           {/* LEFT SIDEBAR: Filters */}
           <aside className="w-full md:w-64 shrink-0 space-y-8">
             <div className="sticky top-24">
-              <div className="flex items-center gap-2 font-medium text-lg mb-4">
+              <div className="flex items-center gap-2 font-medium text-lg mb-6">
                 <Filter className="w-4 h-4" /> Filters
               </div>
               
               <div className="space-y-6">
-                <FilterSection 
+                <FilterSelect 
                   label="Sector" 
                   options={SECTORS} 
                   value={sector} 
                   onChange={setSector} 
                 />
-                <Separator />
-                <FilterSection 
+                
+                <FilterSelect 
                   label="Type" 
                   options={TYPES} 
                   value={type} 
                   onChange={setType} 
                   labelMap={typeLabels} 
                 />
-                <Separator />
-                <FilterSection 
+                
+                <FilterSelect 
                   label="Stage" 
                   options={STAGES} 
                   value={stage} 
                   onChange={setStage} 
                 />
+
+                {(sector !== 'All' || type !== 'All' || stage !== 'All') && (
+                  <Button 
+                    variant="outline" 
+                    className="w-full mt-4 border-dashed text-muted-foreground hover:text-foreground"
+                    onClick={() => { setSector('All'); setType('All'); setStage('All'); }}
+                  >
+                    Reset Filters
+                  </Button>
+                )}
               </div>
             </div>
           </aside>
@@ -201,8 +217,8 @@ export default function StartupOpenings() {
   );
 }
 
-// Sidebar Filter Component
-function FilterSection({
+// Updated Sidebar Filter Component using Select
+function FilterSelect({
   label,
   options,
   value,
@@ -216,25 +232,22 @@ function FilterSection({
   labelMap?: Record<string, string>;
 }) {
   return (
-    <div className="space-y-3">
-      <h3 className="text-xs font-semibold tracking-wider uppercase text-foreground/70">
+    <div className="space-y-2">
+      <label className="text-xs font-semibold tracking-wider uppercase text-foreground/70">
         {label}
-      </h3>
-      <div className="flex flex-col gap-1.5">
-        {options.map((opt) => (
-          <button
-            key={opt}
-            onClick={() => onChange(opt)}
-            className={`text-sm text-left px-3 py-2 rounded-md transition-all ${
-              value === opt
-                ? 'bg-foreground text-background font-medium shadow-sm'
-                : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
-            }`}
-          >
-            {labelMap?.[opt] || opt}
-          </button>
-        ))}
-      </div>
+      </label>
+      <Select value={value} onValueChange={onChange}>
+        <SelectTrigger className="w-full bg-background border-input hover:bg-accent hover:text-accent-foreground transition-colors">
+          <SelectValue placeholder={`Select ${label}`} />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((opt) => (
+            <SelectItem key={opt} value={opt} className="text-sm cursor-pointer">
+              {labelMap?.[opt] || opt}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }
