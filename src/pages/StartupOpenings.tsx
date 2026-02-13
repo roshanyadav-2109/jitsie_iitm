@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import Layout from '@/components/Layout';
-import { useStartupOpenings } from '@/hooks/useStartupOpenings';
+import { useStartupOpenings, useStartupFilters } from '@/hooks/useStartupOpenings';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { SkeletonCard } from '@/components/SkeletonCard';
@@ -12,12 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Skeleton } from "@/components/ui/skeleton";
 import { MapPin, Banknote, Rocket, ExternalLink, Filter } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-
-const SECTORS = ['All', 'AI/ML', 'FinTech', 'EdTech', 'DeepTech', 'BioTech', 'SpaceTech', 'CleanTech', 'HealthTech', 'SaaS/ERP', 'FoodTech', 'AgriTech', 'Sustainability', 'Consulting', 'InsurTech', 'LegalTech', 'Tourism'];
-const TYPES = ['All', 'intern', 'full_time', 'co_founder'];
-const STAGES = ['All', 'Pre-Seed', 'Seed', 'Series A'];
 
 const typeLabels: Record<string, string> = {
   intern: 'Intern',
@@ -31,13 +28,16 @@ export default function StartupOpenings() {
   const [type, setType] = useState('All');
   const [stage, setStage] = useState('All');
 
+  // Fetch dynamic filters from backend
+  const { data: filterOptions, isLoading: isLoadingFilters } = useStartupFilters();
+
   const filters = useMemo(() => ({
     ...(sector !== 'All' && { sector }),
     ...(type !== 'All' && { type }),
     ...(stage !== 'All' && { stage }),
   }), [sector, type, stage]);
 
-  const { data: openings, isLoading } = useStartupOpenings(
+  const { data: openings, isLoading: isLoadingOpenings } = useStartupOpenings(
     Object.keys(filters).length > 0 ? filters : undefined
   );
 
@@ -65,36 +65,46 @@ export default function StartupOpenings() {
               </div>
               
               <div className="space-y-6">
-                <FilterSelect 
-                  label="Sector" 
-                  options={SECTORS} 
-                  value={sector} 
-                  onChange={setSector} 
-                />
-                
-                <FilterSelect 
-                  label="Type" 
-                  options={TYPES} 
-                  value={type} 
-                  onChange={setType} 
-                  labelMap={typeLabels} 
-                />
-                
-                <FilterSelect 
-                  label="Stage" 
-                  options={STAGES} 
-                  value={stage} 
-                  onChange={setStage} 
-                />
+                {isLoadingFilters ? (
+                  <div className="space-y-6">
+                    <Skeleton className="h-16 w-full" />
+                    <Skeleton className="h-16 w-full" />
+                    <Skeleton className="h-16 w-full" />
+                  </div>
+                ) : (
+                  <>
+                    <FilterSelect 
+                      label="Sector" 
+                      options={filterOptions?.sectors || ['All']} 
+                      value={sector} 
+                      onChange={setSector} 
+                    />
+                    
+                    <FilterSelect 
+                      label="Type" 
+                      options={filterOptions?.types || ['All']} 
+                      value={type} 
+                      onChange={setType} 
+                      labelMap={typeLabels} 
+                    />
+                    
+                    <FilterSelect 
+                      label="Stage" 
+                      options={filterOptions?.stages || ['All']} 
+                      value={stage} 
+                      onChange={setStage} 
+                    />
 
-                {(sector !== 'All' || type !== 'All' || stage !== 'All') && (
-                  <Button 
-                    variant="outline" 
-                    className="w-full mt-4 border-dashed text-muted-foreground hover:text-foreground"
-                    onClick={() => { setSector('All'); setType('All'); setStage('All'); }}
-                  >
-                    Reset Filters
-                  </Button>
+                    {(sector !== 'All' || type !== 'All' || stage !== 'All') && (
+                      <Button 
+                        variant="outline" 
+                        className="w-full mt-4 border-dashed text-muted-foreground hover:text-foreground"
+                        onClick={() => { setSector('All'); setType('All'); setStage('All'); }}
+                      >
+                        Reset Filters
+                      </Button>
+                    )}
+                  </>
                 )}
               </div>
             </div>
@@ -102,7 +112,7 @@ export default function StartupOpenings() {
 
           {/* RIGHT SIDE: Content Grid */}
           <div className="flex-1 min-w-0">
-            {isLoading ? (
+            {isLoadingOpenings ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {Array.from({ length: 6 }).map((_, i) => (
                   <div key={i} className="bg-background border p-6 rounded-lg">
@@ -217,7 +227,7 @@ export default function StartupOpenings() {
   );
 }
 
-// Updated Sidebar Filter Component using Select
+// Sidebar Filter Component
 function FilterSelect({
   label,
   options,
