@@ -135,9 +135,8 @@ export default function Navbar() {
           ) : (
             <Link to="/login">
               <Button 
-                variant="ghost" 
                 size="sm" 
-                className="h-8 px-4 text-xs font-serif italic text-foreground hover:bg-secondary rounded-full"
+                className="h-8 px-5 text-xs italic font-medium rounded-full transition-all hover:scale-105"
               >
                 Login
               </Button>
