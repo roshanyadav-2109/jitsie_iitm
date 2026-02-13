@@ -46,7 +46,6 @@ export default function StartupOpenings() {
       <section className="container py-8 md:py-12">
         {/* Header */}
         <div className="mb-8 md:mb-12">
-          <p className="text-xs tracking-[0.2em] uppercase text-muted-foreground mb-2">Ecosystem Careers</p>
           <h1 className="font-serif text-3xl md:text-5xl font-bold tracking-tight mb-3">
             Startup Openings
           </h1>
