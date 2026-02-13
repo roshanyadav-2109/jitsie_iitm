@@ -1,50 +1,65 @@
 import { useState } from 'react';
 import Layout from '@/components/Layout';
-import { usePartners } from '@/hooks/usePartners';
+import { usePartners, usePartnerCategories } from '@/hooks/usePartners';
 import { SkeletonCard } from '@/components/SkeletonCard';
-import { ArrowUpRight, Building2 } from 'lucide-react';
+import { Building2 } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
 
-const CATEGORIES = [
-  { value: '', label: 'All' },
-  { value: 'vc', label: 'VC Partners' },
-  { value: 'corporate', label: 'Corporate Partners' },
-];
+// Mapping for cleaner display labels
+const categoryLabels: Record<string, string> = {
+  vc: 'VC Partners',
+  corporate: 'Corporate Partners',
+  All: 'All Partners'
+};
 
 export default function Partners() {
-  const [category, setCategory] = useState('');
-  const { data: partners, isLoading } = usePartners(category || undefined);
+  const [category, setCategory] = useState('All');
+  
+  // 1. Fetch dynamic categories from backend
+  const { data: categories, isLoading: isLoadingCategories } = usePartnerCategories();
+  
+  // 2. Fetch partners based on selection
+  const { data: partners, isLoading: isLoadingPartners } = usePartners(category);
 
   return (
     <Layout>
       <div className="container py-10">
         <div className="mb-8">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Ecosystem</p>
+          {/* "Ecosystem" text removed here */}
           <h1 className="text-4xl md:text-5xl font-serif font-bold">Partners</h1>
-          <p className="text-muted-foreground mt-2">
+          <p className="text-muted-foreground mt-2 max-w-2xl">
             {partners ? `${partners.length} partners` : 'Loading...'} powering the JITSIE ecosystem.
           </p>
         </div>
 
-        {/* Filters */}
-        <div className="flex flex-wrap items-center gap-1.5 mb-8">
+        {/* Dynamic Filters */}
+        <div className="flex flex-wrap items-center gap-2 mb-8">
           <span className="text-[11px] uppercase tracking-widest text-muted-foreground mr-2">Category</span>
-          {CATEGORIES.map((c) => (
-            <button
-              key={c.value}
-              onClick={() => setCategory(c.value)}
-              className={`px-2.5 py-1 text-xs transition-colors ${
-                category === c.value
-                  ? 'bg-foreground text-background'
-                  : 'border border-foreground/20 hover:border-foreground/40'
-              }`}
-            >
-              {c.label}
-            </button>
-          ))}
+          
+          {isLoadingCategories ? (
+             <div className="flex gap-2">
+               <Skeleton className="h-8 w-20" />
+               <Skeleton className="h-8 w-24" />
+             </div>
+          ) : (
+            categories?.map((c) => (
+              <button
+                key={c}
+                onClick={() => setCategory(c)}
+                className={`px-3 py-1.5 text-xs font-medium rounded-sm transition-all ${
+                  category === c
+                    ? 'bg-foreground text-background shadow-sm'
+                    : 'bg-secondary/50 text-muted-foreground hover:bg-secondary hover:text-foreground'
+                }`}
+              >
+                {categoryLabels[c] || c.toUpperCase()}
+              </button>
+            ))
+          )}
         </div>
 
         {/* Grid */}
-        {isLoading ? (
+        {isLoadingPartners ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {Array.from({ length: 8 }).map((_, i) => (
               <SkeletonCard key={i} />
@@ -55,25 +70,31 @@ export default function Partners() {
             {partners.map((partner) => (
               <div
                 key={partner.id}
-                className="border border-foreground/10 p-6 flex flex-col items-center text-center hover:border-foreground/30 transition-colors group"
+                className="group relative bg-background border border-border p-6 flex flex-col items-center text-center rounded-lg hover:border-foreground/30 hover:shadow-sm transition-all"
               >
-                <div className="h-16 w-16 border border-foreground/10 flex items-center justify-center bg-secondary/50 mb-4">
+                <div className="h-20 w-20 rounded-full border border-border flex items-center justify-center bg-secondary/30 mb-4 group-hover:scale-105 transition-transform duration-300">
                   {partner.logo_url ? (
                     <img src={partner.logo_url} alt={partner.name} className="h-12 w-12 object-contain" />
                   ) : (
-                    <Building2 className="h-6 w-6 text-muted-foreground" />
+                    <Building2 className="h-8 w-8 text-muted-foreground/50" />
                   )}
                 </div>
-                <h3 className="font-serif font-semibold text-sm">{partner.name}</h3>
-                <span className="text-[10px] uppercase tracking-widest text-muted-foreground mt-1">
-                  {partner.category === 'vc' ? 'VC Partner' : 'Corporate Partner'}
+                <h3 className="font-serif font-bold text-base mb-1">{partner.name}</h3>
+                <span className="text-[10px] uppercase tracking-widest text-muted-foreground bg-secondary px-2 py-0.5 rounded">
+                  {categoryLabels[partner.category] || partner.category}
                 </span>
               </div>
             ))}
           </div>
         ) : (
-          <div className="py-12 text-center text-muted-foreground text-sm border border-foreground/10">
-            No partners found.
+          <div className="py-20 text-center border-2 border-dashed border-muted rounded-lg">
+            <p className="text-muted-foreground">No partners found in this category.</p>
+            <button 
+              onClick={() => setCategory('All')}
+              className="text-xs text-primary underline mt-2"
+            >
+              View all partners
+            </button>
           </div>
         )}
       </div>
