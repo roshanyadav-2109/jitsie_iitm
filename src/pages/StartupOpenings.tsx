@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import Layout from '@/components/Layout';
+import PageHeader from '@/components/PageHeader';
 import { useStartupOpenings, useStartupFilters } from '@/hooks/useStartupOpenings';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -41,17 +42,8 @@ export default function StartupOpenings() {
 
   return (
     <Layout>
+      <PageHeader title="Startup Openings" />
       <section className="container py-8 md:py-12">
-        {/* Header */}
-        <div className="mb-8 md:mb-12">
-          <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-3">
-            Startup Openings
-          </h1>
-          <p className="text-muted-foreground text-sm max-w-2xl">
-            Explore opportunities across the JITSIE ecosystem.
-            {openings ? ` Found ${openings.length} active openings.` : ' Loading opportunities...'}
-          </p>
-        </div>
 
         <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
           {/* LEFT SIDEBAR: Filters */}
