@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import PageHeader from '@/components/PageHeader';
 import { useInitiatives } from '@/hooks/useInitiatives';
@@ -35,13 +36,11 @@ export default function Initiatives() {
                   {item.description && (
                     <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{item.description}</p>
                   )}
-                  {item.link && (
-                    <a href={item.link} target="_blank" rel="noopener noreferrer">
-                      <Button variant="outline" size="sm" className="gap-1">
-                        Learn More <ArrowRight className="h-3 w-3" />
-                      </Button>
-                    </a>
-                  )}
+                  <Link to={`/initiatives/${item.id}`}>
+                    <Button variant="outline" size="sm" className="gap-1">
+                      Learn More <ArrowRight className="h-3 w-3" />
+                    </Button>
+                  </Link>
                 </div>
               </div>
             ))}

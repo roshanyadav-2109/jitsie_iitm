@@ -6,7 +6,7 @@ import { SkeletonCard } from '@/components/SkeletonCard';
 import { User, Linkedin } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 
-type FilterTab = 'all' | 'directors' | 'advisors' | 'executive';
+type FilterTab = 'directors' | 'advisors' | 'executive';
 
 function PersonCard({ name, avatar, designation, organization, linkedinUrl, bio, expertise, tag }: {
   name: string;
@@ -55,14 +55,13 @@ function PersonCard({ name, avatar, designation, organization, linkedinUrl, bio,
 }
 
 const tabs: { key: FilterTab; label: string }[] = [
-  { key: 'all', label: 'All' },
   { key: 'directors', label: 'Directors Board' },
   { key: 'advisors', label: 'Advisory Team' },
   { key: 'executive', label: 'Executive Board' },
 ];
 
 export default function Team() {
-  const [activeTab, setActiveTab] = useState<FilterTab>('all');
+  const [activeTab, setActiveTab] = useState<FilterTab>('directors');
   const { data: profiles, isLoading: profilesLoading } = useTeamProfiles();
   const { data: boardMembers, isLoading: boardLoading } = useBoardMembers();
   const { data: advisors, isLoading: advisorsLoading } = useStartupAdvisors();
@@ -76,8 +75,7 @@ export default function Team() {
     ...(profiles || []).map((p) => ({ ...p, category: 'Exe. Board' as const, name: p.full_name || 'Team Member', avatar: p.avatar_url, designation: null, organization: null, linkedinUrl: null, bio: null, expertise: null })),
   ];
 
-  const filteredMembers = activeTab === 'all' ? allMembers
-    : activeTab === 'directors' ? allMembers.filter(m => m.category === 'Directors Board')
+  const filteredMembers = activeTab === 'directors' ? allMembers.filter(m => m.category === 'Directors Board')
     : activeTab === 'advisors' ? allMembers.filter(m => m.category === 'Advisory Board')
     : allMembers.filter(m => m.category === 'Exe. Board');
 
@@ -112,7 +110,7 @@ export default function Team() {
         ) : filteredMembers.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {filteredMembers.map((m) => (
-              <PersonCard key={m.id + m.category} name={m.name} avatar={m.avatar} designation={m.designation} organization={m.organization} linkedinUrl={m.linkedinUrl} bio={m.bio} expertise={m.expertise} tag={activeTab === 'all' ? m.category : undefined} />
+              <PersonCard key={m.id + m.category} name={m.name} avatar={m.avatar} designation={m.designation} organization={m.organization} linkedinUrl={m.linkedinUrl} bio={m.bio} expertise={m.expertise} />
             ))}
           </div>
         ) : (
