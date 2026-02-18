@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import type { Profile, BoardMember, StartupAdvisor } from '@/lib/types';
+import type { Profile, BoardMember, StartupAdvisor, ExecutiveBoardMember } from '@/lib/types';
 
 export function useTeamProfiles() {
   return useQuery({
@@ -43,6 +43,21 @@ export function useStartupAdvisors() {
         .order('display_order');
       if (error) throw error;
       return data as StartupAdvisor[];
+    },
+  });
+}
+
+export function useExecutiveBoard() {
+  return useQuery({
+    queryKey: ['executive_board'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('executive_board')
+        .select('*')
+        .eq('is_active', true)
+        .order('display_order');
+      if (error) throw error;
+      return data as ExecutiveBoardMember[];
     },
   });
 }

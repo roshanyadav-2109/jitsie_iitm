@@ -172,3 +172,17 @@ export interface Initiative {
   created_at: string;
   updated_at: string;
 }
+
+export interface ExecutiveBoardMember {
+  id: string;
+  full_name: string;
+  designation: string | null;
+  bio: string | null;
+  avatar_url: string | null;
+  linkedin_url: string | null;
+  organization: string | null;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Layout from '@/components/Layout';
 import PageHeader from '@/components/PageHeader';
-import { useTeamProfiles, useBoardMembers, useStartupAdvisors } from '@/hooks/useProfiles';
+import { useBoardMembers, useStartupAdvisors, useExecutiveBoard } from '@/hooks/useProfiles';
 import { SkeletonCard } from '@/components/SkeletonCard';
 import { User, Linkedin } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
@@ -62,17 +62,16 @@ const tabs: { key: FilterTab; label: string }[] = [
 
 export default function Team() {
   const [activeTab, setActiveTab] = useState<FilterTab>('directors');
-  const { data: profiles, isLoading: profilesLoading } = useTeamProfiles();
   const { data: boardMembers, isLoading: boardLoading } = useBoardMembers();
   const { data: advisors, isLoading: advisorsLoading } = useStartupAdvisors();
+  const { data: execMembers, isLoading: execLoading } = useExecutiveBoard();
 
-  const isLoading = profilesLoading || boardLoading || advisorsLoading;
+  const isLoading = boardLoading || advisorsLoading || execLoading;
 
-  // Build combined list for "all" tab with category tags
   const allMembers = [
     ...(boardMembers || []).map((m) => ({ ...m, category: 'Directors Board' as const, name: m.full_name, avatar: m.avatar_url, linkedinUrl: m.linkedin_url, expertise: null as string | null })),
     ...(advisors || []).map((a) => ({ ...a, category: 'Advisory Board' as const, name: a.full_name, avatar: a.avatar_url, linkedinUrl: a.linkedin_url })),
-    ...(profiles || []).map((p) => ({ ...p, category: 'Exe. Board' as const, name: p.full_name || 'Team Member', avatar: p.avatar_url, designation: null, organization: null, linkedinUrl: null, bio: null, expertise: null })),
+    ...(execMembers || []).map((e) => ({ ...e, category: 'Exe. Board' as const, name: e.full_name, avatar: e.avatar_url, linkedinUrl: e.linkedin_url, expertise: null as string | null })),
   ];
 
   const filteredMembers = activeTab === 'directors' ? allMembers.filter(m => m.category === 'Directors Board')

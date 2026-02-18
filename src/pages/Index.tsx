@@ -48,18 +48,18 @@ export default function Index() {
       </section>
 
       {/* Section 2 — Stats Strip */}
-      <section className="border-b border-foreground/10 bg-foreground text-background">
+      <section className="border-b border-foreground/10 bg-accent text-accent-foreground">
         <div className="container flex flex-col md:flex-row items-stretch justify-center">
           {[
-            { icon: TrendingUp, label: 'Total Valuation', value: '$2.4B+' },
-            { icon: Building2, label: 'Startups Funded', value: '120+' },
-            { icon: Users, label: 'Active Founders', value: '350+' },
+            { icon: TrendingUp, label: 'Past Speakers', value: '20+' },
+            { icon: Building2, label: 'Startups Mentored', value: '200+' },
+            { icon: Users, label: 'Startup Founders', value: '800+' },
           ].map((s, i) => (
             <div
               key={s.label}
               className={`flex-1 py-8 px-8 text-center ${
-                i < 2 ? 'md:border-r md:border-background/20' : ''
-              } ${i > 0 ? 'border-t md:border-t-0 border-background/20' : ''}`}
+                i < 2 ? 'md:border-r md:border-accent-foreground/20' : ''
+              } ${i > 0 ? 'border-t md:border-t-0 border-accent-foreground/20' : ''}`}
             >
               <s.icon className="h-5 w-5 mx-auto mb-2 opacity-60" />
               <div className="text-3xl md:text-4xl font-bold">{s.value}</div>
@@ -171,14 +171,14 @@ export default function Index() {
       {speakers && speakers.length > 0 && (
         <section className="py-16 bg-muted/50 border-t border-foreground/10">
           <div className="container mb-10 text-center">
-            <h2 className="text-2xl md:text-3xl font-bold">Our Past Speakers</h2>
+            <h2 className="text-3xl md:text-4xl font-normal">Our Past Speakers</h2>
           </div>
           <div className="relative overflow-hidden">
             <div className="marquee-track flex items-center gap-6">
               {[...speakers, ...speakers].map((s, i) => (
                 <div
                   key={`${s.id}-${i}`}
-                  className="shrink-0 relative w-48 h-60 rounded-xl overflow-hidden bg-secondary cursor-pointer"
+                  className="shrink-0 relative w-48 h-60 rounded-2xl overflow-hidden bg-secondary cursor-pointer"
                   onMouseEnter={() => setHoveredSpeaker(`${s.id}-${i}`)}
                   onMouseLeave={() => setHoveredSpeaker(null)}
                 >
@@ -190,7 +190,7 @@ export default function Index() {
                     </div>
                   )}
                   <div
-                    className={`absolute inset-0 bg-foreground/70 flex flex-col justify-end p-4 transition-opacity duration-300 ${
+                    className={`absolute inset-0 bg-foreground/70 rounded-2xl flex flex-col justify-end p-4 transition-opacity duration-300 ${
                       hoveredSpeaker === `${s.id}-${i}` ? 'opacity-100' : 'opacity-0'
                     }`}
                   >
