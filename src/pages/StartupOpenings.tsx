@@ -4,7 +4,6 @@ import { useStartupOpenings, useStartupFilters } from '@/hooks/useStartupOpening
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { SkeletonCard } from '@/components/SkeletonCard';
-import { Separator } from '@/components/ui/separator';
 import {
   Select,
   SelectContent,
@@ -28,7 +27,6 @@ export default function StartupOpenings() {
   const [type, setType] = useState('All');
   const [stage, setStage] = useState('All');
 
-  // Fetch dynamic filters from backend
   const { data: filterOptions, isLoading: isLoadingFilters } = useStartupFilters();
 
   const filters = useMemo(() => ({
@@ -46,11 +44,11 @@ export default function StartupOpenings() {
       <section className="container py-8 md:py-12">
         {/* Header */}
         <div className="mb-8 md:mb-12">
-          <h1 className="font-serif text-3xl md:text-5xl font-bold tracking-tight mb-3">
+          <h1 className="text-3xl md:text-5xl font-bold tracking-tight mb-3">
             Startup Openings
           </h1>
           <p className="text-muted-foreground text-sm max-w-2xl">
-            Explore opportunities across the JITSIE ecosystem. 
+            Explore opportunities across the JITSIE ecosystem.
             {openings ? ` Found ${openings.length} active openings.` : ' Loading opportunities...'}
           </p>
         </div>
@@ -72,27 +70,9 @@ export default function StartupOpenings() {
                   </div>
                 ) : (
                   <>
-                    <FilterSelect 
-                      label="Sector" 
-                      options={filterOptions?.sectors || ['All']} 
-                      value={sector} 
-                      onChange={setSector} 
-                    />
-                    
-                    <FilterSelect 
-                      label="Type" 
-                      options={filterOptions?.types || ['All']} 
-                      value={type} 
-                      onChange={setType} 
-                      labelMap={typeLabels} 
-                    />
-                    
-                    <FilterSelect 
-                      label="Stage" 
-                      options={filterOptions?.stages || ['All']} 
-                      value={stage} 
-                      onChange={setStage} 
-                    />
+                    <FilterSelect label="Sector" options={filterOptions?.sectors || ['All']} value={sector} onChange={setSector} />
+                    <FilterSelect label="Type" options={filterOptions?.types || ['All']} value={type} onChange={setType} labelMap={typeLabels} />
+                    <FilterSelect label="Stage" options={filterOptions?.stages || ['All']} value={stage} onChange={setStage} />
 
                     {(sector !== 'All' || type !== 'All' || stage !== 'All') && (
                       <Button 
@@ -109,93 +89,68 @@ export default function StartupOpenings() {
             </div>
           </aside>
 
-          {/* RIGHT SIDE: Content Grid */}
+          {/* RIGHT SIDE: Single column cards */}
           <div className="flex-1 min-w-0">
             {isLoadingOpenings ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {Array.from({ length: 6 }).map((_, i) => (
+              <div className="space-y-4">
+                {Array.from({ length: 4 }).map((_, i) => (
                   <div key={i} className="bg-background border p-6 rounded-lg">
                     <SkeletonCard />
                   </div>
                 ))}
               </div>
             ) : openings && openings.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="space-y-4">
                 {openings.map((o) => (
                   <div 
                     key={o.id} 
-                    className="group relative bg-background border border-border p-5 rounded-lg hover:border-foreground/30 transition-all hover:shadow-sm flex flex-col gap-4"
+                    className="bg-card border border-border rounded-lg p-5 flex flex-col sm:flex-row sm:items-center gap-4 hover:border-accent/40 transition-colors"
                   >
-                    {/* Header: Logo & Badge */}
-                    <div className="flex justify-between items-start gap-3">
-                      <div className="flex items-center gap-3 min-w-0">
-                        <div className="h-10 w-10 bg-secondary text-secondary-foreground rounded-md flex items-center justify-center text-sm font-bold shrink-0 uppercase">
-                          {o.startup_name.charAt(0)}
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground truncate">
-                            {o.startup_name}
-                          </p>
-                          {o.sector && (
-                            <Badge variant="outline" className="text-[10px] px-1.5 py-0 h-5 mt-1 font-normal">
-                              {o.sector}
-                            </Badge>
-                          )}
-                        </div>
+                    {/* Left: Logo */}
+                    <div className="h-12 w-12 bg-secondary text-secondary-foreground rounded-lg flex items-center justify-center text-lg font-bold shrink-0 uppercase">
+                      {o.startup_name.charAt(0)}
+                    </div>
+
+                    {/* Middle: Info */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h3 className="font-semibold text-base leading-tight">{o.role_title}</h3>
+                        {o.type && (
+                          <Badge variant="outline" className="text-[10px] font-normal">
+                            {typeLabels[o.type] || o.type}
+                          </Badge>
+                        )}
+                        {o.stage && (
+                          <Badge variant="secondary" className="text-[10px] font-normal">
+                            {o.stage}
+                          </Badge>
+                        )}
                       </div>
-                      {o.stage && (
-                        <span className="text-[10px] bg-secondary/50 px-2 py-1 rounded text-muted-foreground font-medium uppercase tracking-wider whitespace-nowrap">
-                          {o.stage}
-                        </span>
-                      )}
+                      <p className="text-sm text-muted-foreground mt-0.5">{o.startup_name}</p>
+                      <div className="flex flex-wrap gap-3 text-xs text-muted-foreground mt-2">
+                        {o.location && (
+                          <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {o.location}</span>
+                        )}
+                        {o.stipend_salary && (
+                          <span className="flex items-center gap-1"><Banknote className="h-3 w-3" /> {o.stipend_salary}</span>
+                        )}
+                        {o.sector && (
+                          <span className="flex items-center gap-1"><Rocket className="h-3 w-3" /> {o.sector}</span>
+                        )}
+                        <span>Posted {formatDistanceToNow(new Date(o.posted_at), { addSuffix: true })}</span>
+                      </div>
                     </div>
 
-                    {/* Role Title */}
-                    <div>
-                      <h3 className="font-serif text-lg font-bold leading-tight group-hover:text-primary transition-colors">
-                        {o.role_title}
-                      </h3>
-                    </div>
-
-                    {/* Description */}
-                    {o.description && (
-                      <p className="text-sm text-muted-foreground line-clamp-2 leading-relaxed">
-                        {o.description}
-                      </p>
-                    )}
-
-                    {/* Details Tags */}
-                    <div className="flex flex-wrap gap-2 text-xs text-muted-foreground mt-auto pt-2">
-                      {o.location && (
-                        <div className="flex items-center gap-1 bg-secondary/30 px-2 py-1 rounded">
-                          <MapPin className="h-3 w-3" /> {o.location}
-                        </div>
-                      )}
-                      {o.stipend_salary && (
-                        <div className="flex items-center gap-1 bg-secondary/30 px-2 py-1 rounded">
-                          <Banknote className="h-3 w-3" /> {o.stipend_salary}
-                        </div>
-                      )}
-                      {o.type && (
-                        <div className="flex items-center gap-1 bg-secondary/30 px-2 py-1 rounded">
-                          <Rocket className="h-3 w-3" /> {typeLabels[o.type] || o.type}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Action Button */}
-                    <div className="pt-4 mt-2 border-t flex items-center justify-between">
-                      <span className="text-[10px] text-muted-foreground">
-                        Posted {formatDistanceToNow(new Date(o.posted_at), { addSuffix: true })}
-                      </span>
+                    {/* Right: Action */}
+                    <div className="shrink-0">
                       {o.apply_link ? (
-                        <a href={o.apply_link} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto">
-                           <Button size="sm" className="w-full h-8 text-xs gap-1.5">
-                            Apply Now <ExternalLink className="h-3 w-3" />
+                        <a href={o.apply_link} target="_blank" rel="noopener noreferrer">
+                          <Button size="sm" className="h-9 text-xs gap-1.5 rounded-lg">
+                            Apply <ExternalLink className="h-3 w-3" />
                           </Button>
                         </a>
                       ) : (
-                        <Button size="sm" disabled variant="secondary" className="h-8 text-xs opacity-70">
+                        <Button size="sm" disabled variant="secondary" className="h-9 text-xs opacity-70 rounded-lg">
                           Closed
                         </Button>
                       )}
@@ -208,7 +163,7 @@ export default function StartupOpenings() {
                 <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center mb-4">
                   <Filter className="h-6 w-6 text-muted-foreground" />
                 </div>
-                <h3 className="font-serif text-lg font-medium mb-1">No openings found</h3>
+                <h3 className="text-lg font-medium mb-1">No openings found</h3>
                 <p className="text-sm text-muted-foreground">Try adjusting your filters to see more results.</p>
                 <Button 
                   variant="link" 
@@ -226,14 +181,7 @@ export default function StartupOpenings() {
   );
 }
 
-// Sidebar Filter Component
-function FilterSelect({
-  label,
-  options,
-  value,
-  onChange,
-  labelMap,
-}: {
+function FilterSelect({ label, options, value, onChange, labelMap }: {
   label: string;
   options: string[];
   value: string;
