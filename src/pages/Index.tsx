@@ -72,7 +72,10 @@ export default function Index() {
       {partners && partners.length > 0 && (
         <section className="py-32 border-b border-foreground/10 overflow-hidden">
           <div className="container mb-20 text-center">
-            <h2 className="text-2xl md:text-3xl font-bold">Together with our partners, we build what's next.</h2>
+            <h2 className="text-3xl md:text-5xl font-bold leading-tight">
+              Together with our partners,<br />
+              we build what's next.
+            </h2>
           </div>
           <div className="relative">
             <div className="marquee-track flex items-center gap-16">
