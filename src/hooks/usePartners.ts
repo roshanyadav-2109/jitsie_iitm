@@ -10,7 +10,7 @@ export function usePartners(category?: string) {
       
       // Only filter if a specific category is selected (ignoring 'All')
       if (category && category !== 'All') {
-        q = q.eq('category', category);
+        q = q.eq('category', category as 'vc' | 'corporate');
       }
       
       const { data, error } = await q;

@@ -8,13 +8,12 @@ import Index from "./pages/Index";
 import Companies from "./pages/Companies";
 import CompanyDetail from "./pages/CompanyDetail";
 import Partners from "./pages/Partners";
-import Library from "./pages/Library";
-import ArticleDetail from "./pages/ArticleDetail";
 import Team from "./pages/Team";
 import Events from "./pages/Events";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import StartupOpenings from "./pages/StartupOpenings";
+import PastSpeakers from "./pages/PastSpeakers";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,9 +31,8 @@ const App = () => (
             <Route path="/companies/:slug" element={<CompanyDetail />} />
             <Route path="/partners" element={<Partners />} />
             <Route path="/openings" element={<StartupOpenings />} />
-            <Route path="/library" element={<Library />} />
-            <Route path="/library/:slug" element={<ArticleDetail />} />
-            <Route path="/team" element={<Team />} />
+            <Route path="/speakers" element={<PastSpeakers />} />
+            <Route path="/leadership" element={<Team />} />
             <Route path="/events" element={<Events />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />

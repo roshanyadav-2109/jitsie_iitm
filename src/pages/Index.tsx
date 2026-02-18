@@ -20,10 +20,10 @@ export default function Index() {
           <p className="text-sm tracking-[0.3em] uppercase text-muted-foreground mb-6">
             IIT Madras Startup Ecosystem
           </p>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-serif font-bold leading-[0.9] tracking-tight">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.9] tracking-tight">
             Build the future.
           </h1>
-          <p className="mt-8 text-lg md:text-xl font-serif italic text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+          <p className="mt-8 text-lg md:text-xl italic text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             "The best way to predict the future is to create it. We back the
             founders who believe this."
           </p>
@@ -57,7 +57,7 @@ export default function Index() {
               } ${i > 0 ? 'border-t md:border-t-0 border-background/20' : ''}`}
             >
               <s.icon className="h-5 w-5 mx-auto mb-2 opacity-60" />
-              <div className="text-3xl md:text-4xl font-serif font-bold">{s.value}</div>
+              <div className="text-3xl md:text-4xl font-bold">{s.value}</div>
               <div className="text-xs uppercase tracking-widest mt-2 opacity-60">{s.label}</div>
             </div>
           ))}
@@ -94,7 +94,7 @@ export default function Index() {
       <section className="py-16">
         <div className="container">
           <div className="flex items-center justify-between mb-10">
-            <h2 className="text-2xl font-serif font-bold">From the Ecosystem</h2>
+            <h2 className="text-2xl font-bold">From the Ecosystem</h2>
             <span className="text-xs text-muted-foreground uppercase tracking-widest">
               Gallery
             </span>
@@ -123,14 +123,13 @@ export default function Index() {
                       loading="lazy"
                     />
                   </div>
-                  {/* Overlay with title & caption */}
                   <div
                     className={`absolute inset-0 bg-foreground/60 flex flex-col justify-end p-5 transition-opacity duration-300 ${
                       hoveredId === img.id ? 'opacity-100' : 'opacity-0'
                     }`}
                   >
                     {img.title && (
-                      <h3 className="text-background font-serif font-bold text-lg leading-tight">
+                      <h3 className="text-background font-bold text-lg leading-tight">
                         {img.title}
                       </h3>
                     )}
@@ -154,7 +153,7 @@ export default function Index() {
       {/* CTA Section */}
       <section className="border-t border-foreground/10 py-20">
         <div className="container max-w-2xl text-center">
-          <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">
             Join the Ecosystem
           </h2>
           <p className="text-muted-foreground mb-8">

@@ -309,6 +309,48 @@ export type Database = {
         }
         Relationships: []
       }
+      past_speakers: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          designation: string | null
+          display_order: number | null
+          full_name: string
+          id: string
+          is_active: boolean
+          linkedin_url: string | null
+          organization: string | null
+          topic: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          designation?: string | null
+          display_order?: number | null
+          full_name: string
+          id?: string
+          is_active?: boolean
+          linkedin_url?: string | null
+          organization?: string | null
+          topic?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          designation?: string | null
+          display_order?: number | null
+          full_name?: string
+          id?: string
+          is_active?: boolean
+          linkedin_url?: string | null
+          organization?: string | null
+          topic?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null

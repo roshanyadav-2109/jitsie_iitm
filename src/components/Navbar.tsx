@@ -10,9 +10,9 @@ const navLinks = [
   { to: '/companies', label: 'Directory' },
   { to: '/partners', label: 'Partners' },
   { to: '/openings', label: 'Openings' },
-  { to: '/library', label: 'Library' },
+  { to: '/speakers', label: 'Past Speakers' },
   { to: '/events', label: 'Events' },
-  { to: '/team', label: 'Team' },
+  { to: '/leadership', label: 'Leadership' },
 ];
 
 export default function Navbar() {
@@ -20,7 +20,6 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
 
-  // Split links into left and right groups
   const leftLinks = navLinks.slice(0, 3);
   const rightLinks = navLinks.slice(3, 6);
 
@@ -30,7 +29,7 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-md border-b border-foreground/5">
       <div className="container relative flex h-16 items-center justify-center">
         
-        {/* Mobile Menu Trigger (Absolute Left) */}
+        {/* Mobile Menu Trigger */}
         <div className="absolute left-4 md:hidden">
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
@@ -39,7 +38,7 @@ export default function Navbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className="w-72">
-              <SheetTitle className="font-serif text-2xl font-bold mb-6">JITSIE</SheetTitle>
+              <SheetTitle className="text-2xl font-bold mb-6">JITSIE</SheetTitle>
               <nav className="flex flex-col gap-2">
                 {navLinks.map((l) => (
                   <Link
@@ -60,13 +59,13 @@ export default function Navbar() {
                 {user ? (
                   <button
                     onClick={() => { signOut(); setOpen(false); }}
-                    className="text-sm font-medium py-3 px-4 text-left text-muted-foreground hover:text-foreground italic"
+                    className="text-sm font-medium py-3 px-4 text-left text-muted-foreground hover:text-foreground"
                   >
                     Logout
                   </button>
                 ) : (
                   <Link to="/login" onClick={() => setOpen(false)}>
-                    <Button className="w-full italic font-serif" size="sm">
+                    <Button className="w-full" size="sm">
                       Login
                     </Button>
                   </Link>
@@ -76,9 +75,8 @@ export default function Navbar() {
           </Sheet>
         </div>
 
-        {/* Desktop Navigation Layout */}
+        {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-10">
-          {/* Left Tabs */}
           <nav className="flex items-center gap-6">
             {leftLinks.map((l) => (
               <Link
@@ -94,14 +92,12 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* Center Logo */}
           <Link to="/" className="flex items-center justify-center shrink-0 mx-4 group">
             <div className="h-9 w-9 bg-foreground text-background flex items-center justify-center rounded-sm transition-transform group-hover:scale-105">
-              <span className="text-sm font-bold font-serif">J</span>
+              <span className="text-sm font-bold">J</span>
             </div>
           </Link>
 
-          {/* Right Tabs */}
           <nav className="flex items-center gap-6">
             {rightLinks.map((l) => (
               <Link
@@ -118,17 +114,17 @@ export default function Navbar() {
           </nav>
         </div>
 
-        {/* Mobile Logo (Centered) */}
+        {/* Mobile Logo */}
         <Link to="/" className="flex md:hidden items-center gap-2">
-          <span className="font-serif text-xl font-bold tracking-tight">JITSIE</span>
+          <span className="text-xl font-bold tracking-tight">JITSIE</span>
         </Link>
 
-        {/* Login Button (Absolute Right Corner) */}
+        {/* Login Button */}
         <div className="absolute right-4 md:right-8 flex items-center">
           {user ? (
             <button
               onClick={signOut}
-              className="text-xs md:text-[13px] font-medium text-muted-foreground hover:text-foreground transition-colors italic"
+              className="text-xs md:text-[13px] font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
               Logout
             </button>
@@ -136,14 +132,13 @@ export default function Navbar() {
             <Link to="/login">
               <Button 
                 size="sm" 
-                className="h-8 px-5 text-xs italic font-medium rounded-full transition-all hover:scale-105"
+                className="h-8 px-5 text-xs font-medium rounded-full transition-all hover:scale-105"
               >
                 Login
               </Button>
             </Link>
           )}
         </div>
-
       </div>
     </header>
   );

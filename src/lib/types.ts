@@ -146,3 +146,17 @@ export interface GalleryImage {
   created_at: string;
   updated_at: string;
 }
+
+export interface PastSpeaker {
+  id: string;
+  full_name: string;
+  designation: string | null;
+  organization: string | null;
+  avatar_url: string | null;
+  linkedin_url: string | null;
+  topic: string | null;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
