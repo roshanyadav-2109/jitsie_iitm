@@ -70,8 +70,8 @@ export default function Index() {
 
       {/* Section 3 — Partners Marquee */}
       {partners && partners.length > 0 && (
-        <section className="py-32 border-b border-foreground/10 overflow-hidden">
-          <div className="container mb-20 text-center">
+        <section className="py-52 border-b border-foreground/10 overflow-hidden">
+          <div className="container mb-28 text-center">
             <h2 className="text-3xl md:text-5xl font-bold leading-tight">
               Together with our partners,<br />
               we build what's next.
