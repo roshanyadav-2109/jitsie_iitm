@@ -117,11 +117,14 @@ export default function Index() {
       </section>
 
       {/* Section 5 — Gallery */}
-      <section className="py-16">
+      <section className="py-52">
         <div className="container">
-          <div className="text-center mb-10">
-            <h2 className="text-2xl md:text-3xl font-bold">Emerging from India, directing the world</h2>
-            <p className="text-muted-foreground mt-2">Viewing our ecosystem</p>
+          <div className="text-center mb-28">
+            <h2 className="text-3xl md:text-5xl font-bold leading-tight">
+              Emerging from India,<br />
+              directing the world
+            </h2>
+            <p className="text-muted-foreground mt-4 text-lg">Viewing our ecosystem</p>
           </div>
 
           {galleryLoading ? (
