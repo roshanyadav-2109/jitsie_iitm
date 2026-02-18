@@ -1,4 +1,5 @@
 import Layout from '@/components/Layout';
+import PageHeader from '@/components/PageHeader';
 import { useEvents } from '@/hooks/useEvents';
 import { SkeletonRow } from '@/components/SkeletonCard';
 import { Button } from '@/components/ui/button';
@@ -11,12 +12,8 @@ export default function Events() {
 
   return (
     <Layout>
+      <PageHeader title="Events" />
       <div className="container py-10 max-w-3xl">
-        <div className="mb-10">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Community</p>
-          <h1 className="text-4xl md:text-5xl font-serif font-bold">Events</h1>
-          <p className="text-muted-foreground mt-2">Workshops, demo days, and networking — on campus and online.</p>
-        </div>
 
         {isLoading ? (
           <div className="space-y-2">

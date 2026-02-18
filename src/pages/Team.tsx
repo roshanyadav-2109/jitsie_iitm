@@ -1,4 +1,5 @@
 import Layout from '@/components/Layout';
+import PageHeader from '@/components/PageHeader';
 import { useTeamProfiles, useBoardMembers, useStartupAdvisors } from '@/hooks/useProfiles';
 import { SkeletonCard } from '@/components/SkeletonCard';
 import { User, Linkedin } from 'lucide-react';
@@ -54,14 +55,8 @@ export default function Team() {
 
   return (
     <Layout>
+      <PageHeader title="Our Leadership Team" />
       <div className="container py-10">
-        <div className="mb-12 max-w-xl">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">People</p>
-          <h1 className="text-4xl md:text-5xl font-bold">Leadership</h1>
-          <p className="text-muted-foreground mt-2">
-            The people building and guiding the JITSIE ecosystem.
-          </p>
-        </div>
 
         {/* Board of Directors */}
         <section className="mb-16">

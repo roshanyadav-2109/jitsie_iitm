@@ -1,4 +1,5 @@
 import Layout from '@/components/Layout';
+import PageHeader from '@/components/PageHeader';
 import { usePastSpeakers } from '@/hooks/usePastSpeakers';
 import { SkeletonCard } from '@/components/SkeletonCard';
 import { User, Linkedin } from 'lucide-react';
@@ -53,14 +54,8 @@ export default function PastSpeakers() {
 
   return (
     <Layout>
+      <PageHeader title="Past Speakers" />
       <div className="container py-10">
-        <div className="mb-12 max-w-xl">
-          <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-2">Community</p>
-          <h1 className="text-4xl md:text-5xl font-bold">Past Speakers</h1>
-          <p className="text-muted-foreground mt-2">
-            Industry leaders and experts who have shared their insights with the JITSIE community.
-          </p>
-        </div>
 
         {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">

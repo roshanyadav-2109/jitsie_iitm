@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import Layout from '@/components/Layout';
+import PageHeader from '@/components/PageHeader';
 import { usePartners, usePartnerCategories } from '@/hooks/usePartners';
 import { SkeletonCard } from '@/components/SkeletonCard';
 import { Building2 } from 'lucide-react';
@@ -23,14 +24,8 @@ export default function Partners() {
 
   return (
     <Layout>
+      <PageHeader title="Partners" />
       <div className="container py-10">
-        <div className="mb-8">
-          {/* "Ecosystem" text removed here */}
-          <h1 className="text-4xl md:text-5xl font-serif font-bold">Partners</h1>
-          <p className="text-muted-foreground mt-2 max-w-2xl">
-            {partners ? `${partners.length} partners` : 'Loading...'} powering the JITSIE ecosystem.
-          </p>
-        </div>
 
         {/* Dynamic Filters */}
         <div className="flex flex-wrap items-center gap-2 mb-8">

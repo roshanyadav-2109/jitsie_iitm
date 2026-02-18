@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
+import PageHeader from '@/components/PageHeader';
 import { useCompanies, useCompanyFilters } from '@/hooks/useCompanies';
 import { SkeletonCard } from '@/components/SkeletonCard';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -25,16 +26,8 @@ export default function Companies() {
 
   return (
     <Layout>
+      <PageHeader title="Startup Directory" />
       <div className="container py-8 md:py-12">
-        <div className="mb-8 md:mb-12">
-          {/* "Portfolio" text removed */}
-          <h1 className="text-3xl md:text-5xl font-serif font-bold tracking-tight mb-3">
-            Startup Directory
-          </h1>
-          <p className="text-muted-foreground mt-2 max-w-2xl text-sm">
-            {companies ? `${companies.length} companies` : 'Loading...'} building the future from IIT Madras.
-          </p>
-        </div>
 
         <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
           {/* SIDEBAR: Filters */}
