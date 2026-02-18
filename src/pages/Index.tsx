@@ -121,8 +121,7 @@ export default function Index() {
         <div className="container">
           <div className="text-center mb-28">
             <h2 className="text-3xl md:text-5xl font-bold leading-tight">
-              Emerging from India,<br />
-              directing the world
+              Emerging from India, directing the world
             </h2>
             <p className="text-muted-foreground mt-4 text-lg">Viewing our ecosystem</p>
           </div>
