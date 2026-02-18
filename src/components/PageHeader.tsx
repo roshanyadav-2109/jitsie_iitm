@@ -1,8 +1,9 @@
 interface PageHeaderProps {
   title: string;
+  description?: string;
 }
 
-export default function PageHeader({ title }: PageHeaderProps) {
+export default function PageHeader({ title, description }: PageHeaderProps) {
   return (
     <div className="relative w-full bg-accent overflow-hidden">
       {/* Decorative geometric shapes */}
@@ -24,6 +25,9 @@ export default function PageHeader({ title }: PageHeaderProps) {
         <h1 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
           {title}
         </h1>
+        {description && (
+          <p className="mt-3 text-base md:text-lg text-white/70 max-w-xl">{description}</p>
+        )}
       </div>
     </div>
   );

@@ -7,8 +7,8 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
 const navLinks = [
-  { to: '/companies', label: 'Directory' },
-  { to: '/partners', label: 'Partners' },
+  { to: '/companies', label: 'Startup Directory' },
+  { to: '/initiatives', label: 'Initiatives' },
   { to: '/openings', label: 'Openings' },
   { to: '/speakers', label: 'Past Speakers' },
   { to: '/events', label: 'Events' },

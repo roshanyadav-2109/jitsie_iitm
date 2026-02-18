@@ -2,6 +2,8 @@ import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { useGalleryImages } from '@/hooks/useGalleryImages';
 import { useCompanies } from '@/hooks/useCompanies';
+import { usePartners } from '@/hooks/usePartners';
+import { usePastSpeakers } from '@/hooks/usePastSpeakers';
 import { Skeleton } from '@/components/ui/skeleton';
 import { ArrowRight, TrendingUp, Building2, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -10,11 +12,14 @@ import { useState } from 'react';
 export default function Index() {
   const { data: gallery, isLoading: galleryLoading } = useGalleryImages();
   const { data: companies } = useCompanies();
+  const { data: partners } = usePartners();
+  const { data: speakers } = usePastSpeakers();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [hoveredSpeaker, setHoveredSpeaker] = useState<string | null>(null);
 
   return (
     <Layout>
-      {/* Hero */}
+      {/* Section 1 — Hero */}
       <section className="py-20 md:py-32 text-center border-b border-foreground/10">
         <div className="container max-w-4xl">
           <p className="text-sm tracking-[0.3em] uppercase text-muted-foreground mb-6">
@@ -24,8 +29,7 @@ export default function Index() {
             Build the future.
           </h1>
           <p className="mt-8 text-lg md:text-xl italic text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            "The best way to predict the future is to create it. We back the
-            founders who believe this."
+            "The best way to predict the future is to create it. We back the founders who believe this."
           </p>
           <div className="mt-10 flex items-center justify-center gap-4">
             <Link to="/companies">
@@ -42,7 +46,7 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Stats Strip */}
+      {/* Section 2 — Stats Strip */}
       <section className="border-b border-foreground/10 bg-foreground text-background">
         <div className="container flex flex-col md:flex-row items-stretch justify-center">
           {[
@@ -64,40 +68,57 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Featured Companies Bar */}
-      {companies && companies.length > 0 && (
-        <section className="border-b border-foreground/10 py-6">
-          <div className="container">
-            <div className="flex items-center gap-6 overflow-x-auto">
-              <span className="text-xs uppercase tracking-widest text-muted-foreground shrink-0">
-                Portfolio
-              </span>
-              <div className="h-4 w-px bg-foreground/20 shrink-0" />
-              {companies.slice(0, 8).map((c) => (
-                <Link
-                  key={c.id}
-                  to={`/companies/${c.slug}`}
-                  className="text-sm font-medium whitespace-nowrap hover:text-accent transition-colors shrink-0"
-                >
-                  {c.name}
-                </Link>
+      {/* Section 3 — Partners Marquee */}
+      {partners && partners.length > 0 && (
+        <section className="py-16 border-b border-foreground/10 overflow-hidden">
+          <div className="container mb-10 text-center">
+            <h2 className="text-2xl md:text-3xl font-bold">Together with our partners, we build what's next.</h2>
+          </div>
+          <div className="relative">
+            <div className="marquee-track flex items-center gap-16">
+              {[...partners, ...partners].map((p, i) => (
+                <div key={`${p.id}-${i}`} className="shrink-0 flex items-center justify-center h-16 w-32 grayscale hover:grayscale-0 transition-all opacity-60 hover:opacity-100">
+                  {p.logo_url ? (
+                    <img src={p.logo_url} alt={p.name} className="max-h-12 max-w-full object-contain" />
+                  ) : (
+                    <span className="text-sm font-bold text-muted-foreground">{p.name}</span>
+                  )}
+                </div>
               ))}
-              <Link to="/companies" className="text-sm text-accent whitespace-nowrap shrink-0 hover:underline">
-                View all →
-              </Link>
             </div>
           </div>
         </section>
       )}
 
-      {/* Image Gallery */}
+      {/* Section 4 — Initiatives CTA Banner */}
+      <section className="relative bg-accent text-accent-foreground overflow-hidden">
+        {/* Decorative geometric patterns */}
+        <svg className="absolute inset-0 w-full h-full opacity-10" xmlns="http://www.w3.org/2000/svg">
+          <line x1="10%" y1="0" x2="30%" y2="100%" stroke="currentColor" strokeWidth="1" />
+          <line x1="70%" y1="0" x2="90%" y2="100%" stroke="currentColor" strokeWidth="1" />
+          <line x1="50%" y1="0" x2="20%" y2="100%" stroke="currentColor" strokeWidth="1" />
+          <circle cx="80%" cy="30%" r="40" fill="none" stroke="currentColor" strokeWidth="1" />
+          <circle cx="15%" cy="70%" r="25" fill="none" stroke="currentColor" strokeWidth="1" />
+        </svg>
+        <div className="relative container py-20 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Looking for our cohorts?</h2>
+          <p className="text-base md:text-lg opacity-90 max-w-xl mx-auto mb-8">
+            We offer mentorships to emerging startups at every stage of innovation.
+          </p>
+          <Link to="/initiatives">
+            <Button className="bg-background text-foreground hover:bg-background/90 rounded-full px-8 h-11 text-sm font-medium">
+              Explore Initiatives
+            </Button>
+          </Link>
+        </div>
+      </section>
+
+      {/* Section 5 — Gallery */}
       <section className="py-16">
         <div className="container">
-          <div className="flex items-center justify-between mb-10">
-            <h2 className="text-2xl font-bold">From the Ecosystem</h2>
-            <span className="text-xs text-muted-foreground uppercase tracking-widest">
-              Gallery
-            </span>
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold">Emerging from India, directing the world</h2>
+            <p className="text-muted-foreground mt-2">Viewing our ecosystem</p>
           </div>
 
           {galleryLoading ? (
@@ -128,52 +149,55 @@ export default function Index() {
                       hoveredId === img.id ? 'opacity-100' : 'opacity-0'
                     }`}
                   >
-                    {img.title && (
-                      <h3 className="text-background font-bold text-lg leading-tight">
-                        {img.title}
-                      </h3>
-                    )}
-                    {img.caption && (
-                      <p className="text-background/70 text-sm mt-1 leading-relaxed">
-                        {img.caption}
-                      </p>
-                    )}
+                    {img.title && <h3 className="text-background font-bold text-lg leading-tight">{img.title}</h3>}
+                    {img.caption && <p className="text-background/70 text-sm mt-1 leading-relaxed">{img.caption}</p>}
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-muted-foreground text-sm py-8 text-center">
-              No gallery images yet.
-            </p>
+            <p className="text-muted-foreground text-sm py-8 text-center">No gallery images yet.</p>
           )}
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="border-t border-foreground/10 py-20">
-        <div className="container max-w-2xl text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Join the Ecosystem
-          </h2>
-          <p className="text-muted-foreground mb-8">
-            Whether you're a founder, investor, or student — there's a place for
-            you in the JITSIE community.
-          </p>
-          <div className="flex items-center justify-center gap-4">
-            <Link to="/signup">
-              <Button className="bg-accent text-accent-foreground hover:bg-accent/90 px-8 h-11">
-                Apply Now
-              </Button>
-            </Link>
-            <Link to="/events">
-              <Button variant="outline" className="border-foreground px-8 h-11">
-                Upcoming Events
-              </Button>
-            </Link>
+      {/* Section 6 — Past Speakers Marquee */}
+      {speakers && speakers.length > 0 && (
+        <section className="py-16 bg-muted/50 border-t border-foreground/10">
+          <div className="container mb-10 text-center">
+            <h2 className="text-2xl md:text-3xl font-bold">Our Past Speakers</h2>
           </div>
-        </div>
-      </section>
+          <div className="relative overflow-hidden">
+            <div className="marquee-track flex items-center gap-6">
+              {[...speakers, ...speakers].map((s, i) => (
+                <div
+                  key={`${s.id}-${i}`}
+                  className="shrink-0 relative w-48 h-60 rounded-xl overflow-hidden bg-secondary cursor-pointer"
+                  onMouseEnter={() => setHoveredSpeaker(`${s.id}-${i}`)}
+                  onMouseLeave={() => setHoveredSpeaker(null)}
+                >
+                  {s.avatar_url ? (
+                    <img src={s.avatar_url} alt={s.full_name} className="w-full h-full object-cover" loading="lazy" />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center bg-secondary">
+                      <span className="text-3xl font-bold text-muted-foreground/30">{s.full_name[0]}</span>
+                    </div>
+                  )}
+                  <div
+                    className={`absolute inset-0 bg-foreground/70 flex flex-col justify-end p-4 transition-opacity duration-300 ${
+                      hoveredSpeaker === `${s.id}-${i}` ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  >
+                    <p className="text-background font-bold text-sm">{s.full_name}</p>
+                    {s.designation && <p className="text-background/70 text-xs mt-0.5">{s.designation}</p>}
+                    {s.organization && <p className="text-background/60 text-xs">{s.organization}</p>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
     </Layout>
   );
 }
