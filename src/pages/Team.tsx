@@ -8,7 +8,7 @@ import { Badge } from '@/components/ui/badge';
 
 type FilterTab = 'all' | 'directors' | 'advisors' | 'executive';
 
-function PersonCard({ name, avatar, designation, organization, linkedinUrl, bio, expertise }: {
+function PersonCard({ name, avatar, designation, organization, linkedinUrl, bio, expertise, tag }: {
   name: string;
   avatar: string | null;
   designation?: string | null;
@@ -16,6 +16,7 @@ function PersonCard({ name, avatar, designation, organization, linkedinUrl, bio,
   linkedinUrl?: string | null;
   bio?: string | null;
   expertise?: string | null;
+  tag?: string;
 }) {
   return (
     <div className="bg-card rounded-xl overflow-hidden border border-border/50">
@@ -27,6 +28,9 @@ function PersonCard({ name, avatar, designation, organization, linkedinUrl, bio,
         )}
       </div>
       <div className="p-4">
+        {tag && (
+          <Badge variant="secondary" className="text-[10px] font-medium mb-2">{tag}</Badge>
+        )}
         <div className="flex items-start justify-between gap-2">
           <div>
             <h3 className="font-semibold text-base">{name}</h3>
@@ -65,9 +69,17 @@ export default function Team() {
 
   const isLoading = profilesLoading || boardLoading || advisorsLoading;
 
-  const showDirectors = activeTab === 'all' || activeTab === 'directors';
-  const showAdvisors = activeTab === 'all' || activeTab === 'advisors';
-  const showExecutive = activeTab === 'all' || activeTab === 'executive';
+  // Build combined list for "all" tab with category tags
+  const allMembers = [
+    ...(boardMembers || []).map((m) => ({ ...m, category: 'Directors Board' as const, name: m.full_name, avatar: m.avatar_url, linkedinUrl: m.linkedin_url, expertise: null as string | null })),
+    ...(advisors || []).map((a) => ({ ...a, category: 'Advisory Board' as const, name: a.full_name, avatar: a.avatar_url, linkedinUrl: a.linkedin_url })),
+    ...(profiles || []).map((p) => ({ ...p, category: 'Exe. Board' as const, name: p.full_name || 'Team Member', avatar: p.avatar_url, designation: null, organization: null, linkedinUrl: null, bio: null, expertise: null })),
+  ];
+
+  const filteredMembers = activeTab === 'all' ? allMembers
+    : activeTab === 'directors' ? allMembers.filter(m => m.category === 'Directors Board')
+    : activeTab === 'advisors' ? allMembers.filter(m => m.category === 'Advisory Board')
+    : allMembers.filter(m => m.category === 'Exe. Board');
 
   return (
     <Layout>
@@ -97,57 +109,17 @@ export default function Team() {
               <div key={i} className="rounded-xl border p-4"><SkeletonCard /></div>
             ))}
           </div>
+        ) : filteredMembers.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {filteredMembers.map((m) => (
+              <PersonCard key={m.id + m.category} name={m.name} avatar={m.avatar} designation={m.designation} organization={m.organization} linkedinUrl={m.linkedinUrl} bio={m.bio} expertise={m.expertise} tag={activeTab === 'all' ? m.category : undefined} />
+            ))}
+          </div>
         ) : (
-          <>
-            {/* Board of Directors */}
-            {showDirectors && boardMembers && boardMembers.length > 0 && (
-              <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-1">Directors Board</h2>
-                <p className="text-sm text-muted-foreground mb-6">Leadership and governance of the JITSIE Foundation.</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                  {boardMembers.map((m) => (
-                    <PersonCard key={m.id} name={m.full_name} avatar={m.avatar_url} designation={m.designation} organization={m.organization} linkedinUrl={m.linkedin_url} bio={m.bio} />
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Advisors */}
-            {showAdvisors && advisors && advisors.length > 0 && (
-              <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-1">Advisory Team</h2>
-                <p className="text-sm text-muted-foreground mb-6">Industry experts guiding our startups to success.</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                  {advisors.map((a) => (
-                    <PersonCard key={a.id} name={a.full_name} avatar={a.avatar_url} designation={a.designation} organization={a.organization} linkedinUrl={a.linkedin_url} bio={a.bio} expertise={a.expertise} />
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Core Team */}
-            {showExecutive && profiles && profiles.length > 0 && (
-              <section className="mb-12">
-                <h2 className="text-2xl font-bold mb-1">Executive Board</h2>
-                <p className="text-sm text-muted-foreground mb-6">The team behind day-to-day operations.</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-                  {profiles.map((p) => (
-                    <PersonCard key={p.id} name={p.full_name || 'Team Member'} avatar={p.avatar_url} />
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Empty state when filtered and nothing found */}
-            {((activeTab === 'directors' && (!boardMembers || boardMembers.length === 0)) ||
-              (activeTab === 'advisors' && (!advisors || advisors.length === 0)) ||
-              (activeTab === 'executive' && (!profiles || profiles.length === 0))) && (
-              <div className="border border-border/50 rounded-xl p-16 text-center">
-                <User className="h-8 w-8 mx-auto text-muted-foreground mb-3" />
-                <p className="text-muted-foreground text-sm">No members listed yet.</p>
-              </div>
-            )}
-          </>
+          <div className="border border-border/50 rounded-xl p-16 text-center">
+            <User className="h-8 w-8 mx-auto text-muted-foreground mb-3" />
+            <p className="text-muted-foreground text-sm">No members listed yet.</p>
+          </div>
         )}
       </div>
     </Layout>
