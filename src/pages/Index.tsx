@@ -21,16 +21,17 @@ export default function Index() {
     <Layout>
       {/* Section 1 — Hero */}
       <section className="py-20 md:py-32 text-center border-b border-foreground/10">
-        <div className="container max-w-4xl">
-        <p className="text-base tracking-[0.3em] uppercase text-muted-foreground mb-6 font-normal">
-          IIT Madras Startup Ecosystem
+        {/* Changed max-w-4xl to max-w-6xl to allow the text to stay on one line */}
+        <div className="container max-w-6xl">
+          <p className="text-sm tracking-[0.3em] uppercase text-muted-foreground mb-6">
+            IIT Madras Startup Ecosystem
           </p>
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-normal leading-[0.9] tracking-tight">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.9] tracking-tight">
             Build the future.
           </h1>
-        <p className="mt-8 text-xl md:text-2xl italic text-muted-foreground max-w-2xl mx-auto leading-relaxed font-normal">
-          "The best way to predict the future is to create it. We back the founders who believe this."
-        </p>
+          <p className="mt-8 text-lg md:text-xl italic text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            "The best way to predict the future is to create it. We back the founders who believe this."
+          </p>
           <div className="mt-10 flex items-center justify-center gap-4">
             <Link to="/companies">
               <Button className="bg-foreground text-background hover:bg-foreground/90 px-6 h-11 text-sm">
@@ -61,8 +62,8 @@ export default function Index() {
               } ${i > 0 ? 'border-t md:border-t-0 border-background/20' : ''}`}
             >
               <s.icon className="h-5 w-5 mx-auto mb-2 opacity-60" />
-             <div className="text-4xl md:text-5xl font-normal">{s.value}</div>
-             <div className="text-sm uppercase tracking-widest mt-2 opacity-60 font-normal">{s.label}</div>
+              <div className="text-3xl md:text-4xl font-bold">{s.value}</div>
+              <div className="text-xs uppercase tracking-widest mt-2 opacity-60">{s.label}</div>
             </div>
           ))}
         </div>
@@ -72,10 +73,10 @@ export default function Index() {
       {partners && partners.length > 0 && (
         <section className="py-52 border-b border-foreground/10 overflow-hidden">
           <div className="container mb-28 text-center">
-           <h2 className="text-4xl md:text-6xl font-normal leading-tight">
-             Together with our partners,<br />
-             we build what's next.
-           </h2>
+            <h2 className="text-3xl md:text-5xl font-bold leading-tight">
+              Together with our partners,<br />
+              we build what's next.
+            </h2>
           </div>
           <div className="relative">
             <div className="marquee-track flex items-center gap-16">
@@ -104,10 +105,10 @@ export default function Index() {
           <circle cx="15%" cy="70%" r="25" fill="none" stroke="currentColor" strokeWidth="1" />
         </svg>
         <div className="relative container py-20 text-center">
-         <h2 className="text-4xl md:text-5xl font-normal mb-4">Looking for our cohorts?</h2>
-         <p className="text-lg md:text-xl opacity-90 max-w-xl mx-auto mb-8 font-normal">
-           We offer mentorships to emerging startups at every stage of innovation.
-         </p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4">Looking for our cohorts?</h2>
+          <p className="text-base md:text-lg opacity-90 max-w-xl mx-auto mb-8">
+            We offer mentorships to emerging startups at every stage of innovation.
+          </p>
           <Link to="/initiatives">
             <Button className="bg-background text-foreground hover:bg-background/90 rounded-full px-8 h-11 text-sm font-medium">
               Explore Initiatives
@@ -120,10 +121,10 @@ export default function Index() {
       <section className="py-52">
         <div className="container">
           <div className="text-center mb-28">
-           <h2 className="text-4xl md:text-6xl font-normal leading-tight">
-             Emerging from India, directing the world
-           </h2>
-           <p className="text-muted-foreground mt-4 text-xl font-normal">Viewing our ecosystem</p>
+            <h2 className="text-3xl md:text-5xl font-bold leading-tight">
+              Emerging from India, directing the world
+            </h2>
+            <p className="text-muted-foreground mt-4 text-lg">Viewing our ecosystem</p>
           </div>
 
           {galleryLoading ? (
@@ -170,7 +171,7 @@ export default function Index() {
       {speakers && speakers.length > 0 && (
         <section className="py-16 bg-muted/50 border-t border-foreground/10">
           <div className="container mb-10 text-center">
-            <h2 className="text-3xl md:text-4xl font-normal">Our Past Speakers</h2>
+            <h2 className="text-2xl md:text-3xl font-bold">Our Past Speakers</h2>
           </div>
           <div className="relative overflow-hidden">
             <div className="marquee-track flex items-center gap-6">
