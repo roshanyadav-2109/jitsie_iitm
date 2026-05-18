@@ -4,18 +4,11 @@ import PageHeader from '@/components/PageHeader';
 import { useBoardMembers, useStartupAdvisors, useExecutiveBoard } from '@/hooks/useProfiles';
 import { SkeletonCard } from '@/components/SkeletonCard';
 import { User, Linkedin } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 type FilterTab = 'directors' | 'advisors' | 'executive';
 
-function PersonCard({
-  name,
-  avatar,
-  designation,
-  organization,
-  linkedinUrl,
-  bio,
-  expertise,
-}: {
+function PersonCard({ name, avatar, designation, organization, linkedinUrl, bio, expertise, tag }: {
   name: string;
   avatar: string | null;
   designation?: string | null;
@@ -23,60 +16,48 @@ function PersonCard({
   linkedinUrl?: string | null;
   bio?: string | null;
   expertise?: string | null;
+  tag?: string;
 }) {
   return (
-    <div className="group bg-background flex flex-col">
-      <div className="aspect-[3/4] bg-secondary relative overflow-hidden">
+    <div className="bg-card rounded-xl overflow-hidden border border-border/50">
+      <div className="aspect-square bg-muted flex items-center justify-center overflow-hidden">
         {avatar ? (
-          <img
-            src={avatar}
-            alt={name}
-            className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
-          />
+          <img src={avatar} alt={name} className="w-full h-full object-cover" />
         ) : (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <User className="h-12 w-12 text-muted-foreground/40" strokeWidth={1.2} />
-          </div>
-        )}
-        {linkedinUrl && (
-          <a
-            href={linkedinUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${name} on LinkedIn`}
-            className="absolute top-3 right-3 h-8 w-8 flex items-center justify-center bg-background/90 backdrop-blur border border-foreground/10 opacity-0 group-hover:opacity-100 hover:bg-accent hover:text-accent-foreground transition-all"
-          >
-            <Linkedin className="h-3.5 w-3.5" />
-          </a>
+          <User className="h-16 w-16 text-muted-foreground/40" />
         )}
       </div>
-      <div className="pt-5 pb-7">
-        <h3 className="font-serif text-lg font-bold leading-tight">{name}</h3>
-        {designation && (
-          <p className="text-sm text-muted-foreground mt-1">{designation}</p>
+      <div className="p-4">
+        {tag && (
+          <Badge variant="secondary" className="text-[10px] font-medium mb-2">{tag}</Badge>
         )}
-        {organization && (
-          <p className="text-xs text-muted-foreground/70 mt-0.5">{organization}</p>
-        )}
+        <div className="flex items-start justify-between gap-2">
+          <div>
+            <h3 className="font-semibold text-base">{name}</h3>
+            {designation && <p className="text-sm text-muted-foreground mt-0.5">{designation}</p>}
+            {organization && <p className="text-sm text-muted-foreground">{organization}</p>}
+          </div>
+          {linkedinUrl && (
+            <a href={linkedinUrl} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:text-accent transition-colors shrink-0 mt-1">
+              <Linkedin className="h-4 w-4" />
+            </a>
+          )}
+        </div>
         {expertise && (
-          <p className="mt-3 inline-block text-[10px] font-mono uppercase tracking-[0.2em] text-accent border-b border-accent/30 pb-0.5">
-            {expertise}
-          </p>
+          <div className="mt-2">
+            <Badge variant="outline" className="text-xs font-normal">{expertise}</Badge>
+          </div>
         )}
-        {bio && (
-          <p className="text-xs text-muted-foreground mt-3 leading-relaxed line-clamp-3">
-            {bio}
-          </p>
-        )}
+        {bio && <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{bio}</p>}
       </div>
     </div>
   );
 }
 
-const tabs: { key: FilterTab; label: string; tag: string }[] = [
-  { key: 'directors', label: 'Directors', tag: '01' },
-  { key: 'advisors', label: 'Advisory', tag: '02' },
-  { key: 'executive', label: 'Executive', tag: '03' },
+const tabs: { key: FilterTab; label: string }[] = [
+  { key: 'directors', label: 'Directors Board' },
+  { key: 'advisors', label: 'Advisory Team' },
+  { key: 'executive', label: 'Executive Board' },
 ];
 
 export default function Team() {
@@ -88,97 +69,52 @@ export default function Team() {
   const isLoading = boardLoading || advisorsLoading || execLoading;
 
   const allMembers = [
-    ...(boardMembers || []).map((m) => ({
-      ...m,
-      category: 'directors' as const,
-      name: m.full_name,
-      avatar: m.avatar_url,
-      linkedinUrl: m.linkedin_url,
-      expertise: null as string | null,
-    })),
-    ...(advisors || []).map((a) => ({
-      ...a,
-      category: 'advisors' as const,
-      name: a.full_name,
-      avatar: a.avatar_url,
-      linkedinUrl: a.linkedin_url,
-    })),
-    ...(execMembers || []).map((e) => ({
-      ...e,
-      category: 'executive' as const,
-      name: e.full_name,
-      avatar: e.avatar_url,
-      linkedinUrl: e.linkedin_url,
-      expertise: null as string | null,
-    })),
+    ...(boardMembers || []).map((m) => ({ ...m, category: 'Directors Board' as const, name: m.full_name, avatar: m.avatar_url, linkedinUrl: m.linkedin_url, expertise: null as string | null })),
+    ...(advisors || []).map((a) => ({ ...a, category: 'Advisory Board' as const, name: a.full_name, avatar: a.avatar_url, linkedinUrl: a.linkedin_url })),
+    ...(execMembers || []).map((e) => ({ ...e, category: 'Exe. Board' as const, name: e.full_name, avatar: e.avatar_url, linkedinUrl: e.linkedin_url, expertise: null as string | null })),
   ];
 
-  const filteredMembers = allMembers.filter((m) => m.category === activeTab);
+  const filteredMembers = activeTab === 'directors' ? allMembers.filter(m => m.category === 'Directors Board')
+    : activeTab === 'advisors' ? allMembers.filter(m => m.category === 'Advisory Board')
+    : allMembers.filter(m => m.category === 'Exe. Board');
 
   return (
     <Layout>
-      <PageHeader
-        title="Leadership."
-        description="The directors, advisors, and operators who shape the institution and its founders."
-        eyebrow="03 · The Society"
-      />
-      <div className="container py-16 md:py-20">
-        {/* Tabs */}
-        <div className="flex flex-wrap items-center gap-x-10 gap-y-3 mb-14 border-b border-foreground/10 pb-1">
-          {tabs.map((tab) => {
-            const active = activeTab === tab.key;
-            return (
-              <button
-                key={tab.key}
-                onClick={() => setActiveTab(tab.key)}
-                className="group relative pb-3 -mb-px"
-              >
-                <span className="flex items-baseline gap-2">
-                  <span
-                    className={`font-mono text-[10px] uppercase tracking-[0.25em] ${
-                      active ? 'text-accent' : 'text-muted-foreground'
-                    }`}
-                  >
-                    {tab.tag}
-                  </span>
-                  <span
-                    className={`font-serif text-xl ${
-                      active ? 'text-foreground font-bold' : 'text-muted-foreground hover:text-foreground'
-                    }`}
-                  >
-                    {tab.label}
-                  </span>
-                </span>
-                {active && <span className="absolute bottom-0 left-0 right-0 h-px bg-accent" />}
-              </button>
-            );
-          })}
+      <PageHeader title="Our Leadership Team" />
+      <div className="container py-10">
+
+        {/* Filter Buttons */}
+        <div className="flex flex-wrap gap-3 mb-10">
+          {tabs.map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => setActiveTab(tab.key)}
+              className={`px-5 py-2 rounded-full text-sm font-medium transition-colors border ${
+                activeTab === tab.key
+                  ? 'bg-accent/15 text-accent border-accent/30'
+                  : 'bg-transparent text-muted-foreground border-border hover:border-accent/30 hover:text-foreground'
+              }`}
+            >
+              {tab.label}
+            </button>
+          ))}
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {Array.from({ length: 8 }).map((_, i) => (
-              <SkeletonCard key={i} />
+              <div key={i} className="rounded-xl border p-4"><SkeletonCard /></div>
             ))}
           </div>
         ) : filteredMembers.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-14">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {filteredMembers.map((m) => (
-              <PersonCard
-                key={m.id + m.category}
-                name={m.name}
-                avatar={m.avatar}
-                designation={m.designation}
-                organization={m.organization}
-                linkedinUrl={m.linkedinUrl}
-                bio={m.bio}
-                expertise={m.expertise}
-              />
+              <PersonCard key={m.id + m.category} name={m.name} avatar={m.avatar} designation={m.designation} organization={m.organization} linkedinUrl={m.linkedinUrl} bio={m.bio} expertise={m.expertise} />
             ))}
           </div>
         ) : (
-          <div className="border border-dashed border-foreground/15 p-20 text-center">
-            <User className="h-6 w-6 mx-auto text-muted-foreground mb-3" />
+          <div className="border border-border/50 rounded-xl p-16 text-center">
+            <User className="h-8 w-8 mx-auto text-muted-foreground mb-3" />
             <p className="text-muted-foreground text-sm">No members listed yet.</p>
           </div>
         )}
