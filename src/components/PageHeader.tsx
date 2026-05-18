@@ -1,33 +1,33 @@
 interface PageHeaderProps {
   title: string;
   description?: string;
+  eyebrow?: string;
 }
 
-export default function PageHeader({ title, description }: PageHeaderProps) {
+export default function PageHeader({ title, description, eyebrow }: PageHeaderProps) {
   return (
-    <div className="relative w-full bg-accent overflow-hidden">
-      {/* Decorative geometric shapes */}
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute bottom-0 left-16 w-32 h-32 border-[3px] border-white/40 rounded-full translate-y-1/2" />
-        <div className="absolute top-0 right-1/4 w-full h-full">
-          <svg viewBox="0 0 400 200" className="w-full h-full" preserveAspectRatio="xMaxYMid slice">
-            <line x1="0" y1="0" x2="400" y2="0" stroke="white" strokeWidth="2" />
-            <line x1="50" y1="0" x2="350" y2="200" stroke="white" strokeWidth="1.5" />
-            <line x1="100" y1="0" x2="400" y2="200" stroke="white" strokeWidth="1.5" />
-            <line x1="150" y1="0" x2="450" y2="200" stroke="white" strokeWidth="1.5" />
-            <line x1="200" y1="0" x2="500" y2="200" stroke="white" strokeWidth="1.5" />
-            <line x1="250" y1="0" x2="550" y2="200" stroke="white" strokeWidth="1.5" />
-            <line x1="300" y1="0" x2="600" y2="200" stroke="white" strokeWidth="1.5" />
-          </svg>
+    <div className="relative w-full bg-primary text-primary-foreground overflow-hidden noise">
+      {/* Decorative grid */}
+      <div className="absolute inset-0 grid-pattern opacity-40 pointer-events-none" />
+      {/* Accent orb */}
+      <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-accent/15 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/50 to-transparent" />
+
+      <div className="container relative py-20 md:py-28">
+        <div className="max-w-3xl">
+          <p className="font-mono text-[11px] tracking-[0.3em] uppercase text-accent mb-5 flex items-center gap-3">
+            <span className="h-px w-8 bg-accent" />
+            {eyebrow || 'JITSIE · IIT Madras'}
+          </p>
+          <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl font-bold leading-[0.95] tracking-tight text-balance">
+            {title}
+          </h1>
+          {description && (
+            <p className="mt-6 text-base md:text-lg text-primary-foreground/70 max-w-xl leading-relaxed text-pretty">
+              {description}
+            </p>
+          )}
         </div>
-      </div>
-      <div className="container relative py-14 md:py-20">
-        <h1 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
-          {title}
-        </h1>
-        {description && (
-          <p className="mt-3 text-base md:text-lg text-white/70 max-w-xl">{description}</p>
-        )}
       </div>
     </div>
   );

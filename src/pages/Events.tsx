@@ -12,65 +12,87 @@ export default function Events() {
 
   return (
     <Layout>
-      <PageHeader title="Events" />
-      <div className="container py-10 max-w-3xl">
-
+      <PageHeader
+        title="Events & Convenings."
+        description="Lectures, residencies, demo days, and intimate convenings hosted by JITSIE at IIT Madras."
+        eyebrow="04 · The Calendar"
+      />
+      <div className="container py-16 md:py-20 max-w-4xl">
         {isLoading ? (
           <div className="space-y-2">
-            {Array.from({ length: 4 }).map((_, i) => <SkeletonRow key={i} />)}
+            {Array.from({ length: 4 }).map((_, i) => (
+              <SkeletonRow key={i} />
+            ))}
           </div>
         ) : events && events.length > 0 ? (
-          <div className="border-t border-foreground">
+          <div className="border-t border-foreground/15">
             {events.map((e) => {
-              const past = isPast(new Date(e.date_time));
+              const d = new Date(e.date_time);
+              const past = isPast(d);
               return (
                 <div
                   key={e.id}
-                  className={`py-6 border-b border-foreground/10 ${past ? 'opacity-50' : ''}`}
+                  className={`group grid grid-cols-12 gap-6 py-8 border-b border-foreground/10 items-center transition-colors hover:bg-card ${
+                    past ? 'opacity-55' : ''
+                  }`}
                 >
-                  <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                    <div className="flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <span className="text-[11px] font-mono bg-foreground text-background px-1.5 py-0.5">
-                          {format(new Date(e.date_time), 'MMM d')}
-                        </span>
-                        {past && (
-                          <span className="text-[11px] text-muted-foreground">PAST</span>
-                        )}
-                      </div>
-                      <h2 className="font-serif text-lg font-semibold">{e.title}</h2>
-                      <div className="flex flex-wrap items-center gap-3 mt-2 text-sm text-muted-foreground">
-                        <span className="flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          {format(new Date(e.date_time), 'h:mm a')}
-                        </span>
-                        {e.location && (
-                          <span className="flex items-center gap-1">
-                            <MapPin className="h-3 w-3" />
-                            {e.location}
-                          </span>
-                        )}
-                      </div>
+                  <div className="col-span-12 md:col-span-2">
+                    <div className="font-serif text-4xl md:text-5xl font-bold leading-none text-primary">
+                      {format(d, 'dd')}
                     </div>
+                    <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground mt-2">
+                      {format(d, 'MMM yyyy')}
+                    </div>
+                  </div>
+
+                  <div className="col-span-12 md:col-span-7">
+                    <div className="flex items-center gap-3 mb-2">
+                      {past && (
+                        <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
+                          Past
+                        </span>
+                      )}
+                    </div>
+                    <h2 className="font-serif text-xl md:text-2xl font-bold leading-tight group-hover:text-accent transition-colors">
+                      {e.title}
+                    </h2>
+                    <div className="flex flex-wrap items-center gap-4 mt-3 text-xs text-muted-foreground">
+                      <span className="flex items-center gap-1.5">
+                        <Clock className="h-3 w-3" />
+                        {format(d, 'h:mm a')}
+                      </span>
+                      {e.location && (
+                        <span className="flex items-center gap-1.5">
+                          <MapPin className="h-3 w-3" />
+                          {e.location}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="col-span-12 md:col-span-3 flex md:justify-end items-center gap-2">
                     {!past && (
-                      <div className="flex items-center gap-2 shrink-0">
+                      <>
                         <Button
-                          variant="outline"
+                          variant="ghost"
                           size="sm"
-                          className="h-7 px-2.5 text-xs border-foreground/20"
+                          className="h-9 text-[11px] uppercase tracking-[0.18em] rounded-none text-muted-foreground hover:text-foreground"
                           onClick={() => downloadICS(e)}
                         >
-                          <CalendarPlus className="h-3 w-3 mr-1" />
-                          .ics
+                          <CalendarPlus className="h-3.5 w-3.5 mr-1.5" />
+                          Add to Calendar
                         </Button>
                         {e.registration_link && (
                           <a href={e.registration_link} target="_blank" rel="noopener noreferrer">
-                            <Button size="sm" className="h-7 px-3 text-xs bg-foreground text-background hover:bg-foreground/90">
-                              Register <ArrowUpRight className="h-3 w-3 ml-0.5" />
+                            <Button
+                              size="sm"
+                              className="h-9 px-4 bg-primary text-primary-foreground hover:bg-accent hover:text-accent-foreground rounded-none text-[11px] uppercase tracking-[0.2em] font-medium"
+                            >
+                              RSVP <ArrowUpRight className="h-3 w-3 ml-1.5" />
                             </Button>
                           </a>
                         )}
-                      </div>
+                      </>
                     )}
                   </div>
                 </div>
@@ -78,7 +100,7 @@ export default function Events() {
             })}
           </div>
         ) : (
-          <p className="text-muted-foreground">No upcoming events.</p>
+          <p className="text-muted-foreground py-20 text-center">No upcoming events.</p>
         )}
       </div>
     </Layout>

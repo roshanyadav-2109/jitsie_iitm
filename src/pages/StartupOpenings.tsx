@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react';
 import Layout from '@/components/Layout';
 import PageHeader from '@/components/PageHeader';
 import { useStartupOpenings, useStartupFilters } from '@/hooks/useStartupOpenings';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { SkeletonCard } from '@/components/SkeletonCard';
 import {
@@ -11,9 +10,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Skeleton } from "@/components/ui/skeleton";
-import { MapPin, Banknote, Rocket, ExternalLink, Filter } from 'lucide-react';
+} from '@/components/ui/select';
+import { Skeleton } from '@/components/ui/skeleton';
+import { MapPin, Banknote, Rocket, ArrowUpRight, SlidersHorizontal, Briefcase } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
 const typeLabels: Record<string, string> = {
@@ -30,137 +29,178 @@ export default function StartupOpenings() {
 
   const { data: filterOptions, isLoading: isLoadingFilters } = useStartupFilters();
 
-  const filters = useMemo(() => ({
-    ...(sector !== 'All' && { sector }),
-    ...(type !== 'All' && { type }),
-    ...(stage !== 'All' && { stage }),
-  }), [sector, type, stage]);
+  const filters = useMemo(
+    () => ({
+      ...(sector !== 'All' && { sector }),
+      ...(type !== 'All' && { type }),
+      ...(stage !== 'All' && { stage }),
+    }),
+    [sector, type, stage]
+  );
 
   const { data: openings, isLoading: isLoadingOpenings } = useStartupOpenings(
     Object.keys(filters).length > 0 ? filters : undefined
   );
 
+  const hasFilters = sector !== 'All' || type !== 'All' || stage !== 'All';
+
   return (
     <Layout>
-      <PageHeader title="Startup Openings" />
-      <section className="container py-8 md:py-12">
-
-        <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
-          {/* LEFT SIDEBAR: Filters */}
-          <aside className="w-full md:w-64 shrink-0 space-y-8">
-            <div className="sticky top-24">
-              <div className="flex items-center gap-2 font-medium text-lg mb-6">
-                <Filter className="w-4 h-4" /> Filters
+      <PageHeader
+        title="Open Roles in the Network."
+        description="Selected positions inside JITSIE startups — co-founder, leadership, and early-team mandates."
+        eyebrow="06 · Careers"
+      />
+      <section className="container py-16 md:py-20">
+        <div className="flex flex-col md:flex-row gap-10 lg:gap-16">
+          <aside className="w-full md:w-60 shrink-0">
+            <div className="sticky top-28 space-y-8">
+              <div className="flex items-center gap-2">
+                <SlidersHorizontal className="h-3.5 w-3.5 text-accent" />
+                <p className="font-mono text-[11px] uppercase tracking-[0.25em]">Refine</p>
               </div>
-              
-              <div className="space-y-6">
-                {isLoadingFilters ? (
-                  <div className="space-y-6">
-                    <Skeleton className="h-16 w-full" />
-                    <Skeleton className="h-16 w-full" />
-                    <Skeleton className="h-16 w-full" />
-                  </div>
-                ) : (
-                  <>
-                    <FilterSelect label="Sector" options={filterOptions?.sectors || ['All']} value={sector} onChange={setSector} />
-                    <FilterSelect label="Type" options={filterOptions?.types || ['All']} value={type} onChange={setType} labelMap={typeLabels} />
-                    <FilterSelect label="Stage" options={filterOptions?.stages || ['All']} value={stage} onChange={setStage} />
 
-                    {(sector !== 'All' || type !== 'All' || stage !== 'All') && (
-                      <Button 
-                        variant="outline" 
-                        className="w-full mt-4 border-dashed text-muted-foreground hover:text-foreground"
-                        onClick={() => { setSector('All'); setType('All'); setStage('All'); }}
-                      >
-                        Reset Filters
-                      </Button>
-                    )}
-                  </>
-                )}
-              </div>
+              {isLoadingFilters ? (
+                <div className="space-y-6">
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                  <Skeleton className="h-10 w-full" />
+                </div>
+              ) : (
+                <div className="space-y-7">
+                  <FilterSelect
+                    label="Sector"
+                    options={filterOptions?.sectors || ['All']}
+                    value={sector}
+                    onChange={setSector}
+                  />
+                  <FilterSelect
+                    label="Type"
+                    options={filterOptions?.types || ['All']}
+                    value={type}
+                    onChange={setType}
+                    labelMap={typeLabels}
+                  />
+                  <FilterSelect
+                    label="Stage"
+                    options={filterOptions?.stages || ['All']}
+                    value={stage}
+                    onChange={setStage}
+                  />
+                  {hasFilters && (
+                    <button
+                      onClick={() => {
+                        setSector('All');
+                        setType('All');
+                        setStage('All');
+                      }}
+                      className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground hover:text-accent transition-colors"
+                    >
+                      Clear all
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
           </aside>
 
-          {/* RIGHT SIDE: Single column cards */}
           <div className="flex-1 min-w-0">
+            <div className="flex items-baseline justify-between mb-8 pb-4 border-b border-foreground/10">
+              <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                {isLoadingOpenings ? '—' : `${openings?.length ?? 0} roles`}
+              </p>
+              <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
+                Updated continuously
+              </p>
+            </div>
+
             {isLoadingOpenings ? (
               <div className="space-y-4">
                 {Array.from({ length: 4 }).map((_, i) => (
-                  <div key={i} className="bg-background border p-6 rounded-lg">
+                  <div key={i} className="border border-foreground/10 p-6">
                     <SkeletonCard />
                   </div>
                 ))}
               </div>
             ) : openings && openings.length > 0 ? (
-              <div className="space-y-4">
+              <div className="border-t border-foreground/10">
                 {openings.map((o) => (
-                  <div 
-                    key={o.id} 
-                    className="bg-card border border-border rounded-lg p-5 flex flex-col sm:flex-row sm:items-center gap-4 hover:border-accent/40 transition-colors"
+                  <div
+                    key={o.id}
+                    className="group grid grid-cols-12 gap-6 py-7 border-b border-foreground/10 items-center hover:bg-card transition-colors"
                   >
-                    {/* Left: Logo */}
-                    <div className="h-12 w-12 bg-secondary text-secondary-foreground rounded-lg flex items-center justify-center text-lg font-bold shrink-0 uppercase">
-                      {o.startup_name.charAt(0)}
+                    <div className="col-span-12 md:col-span-2">
+                      <div className="h-14 w-14 bg-primary text-primary-foreground flex items-center justify-center font-serif text-xl font-bold uppercase">
+                        {o.startup_name.charAt(0)}
+                      </div>
                     </div>
 
-                    {/* Middle: Info */}
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <h3 className="font-semibold text-base leading-tight">{o.role_title}</h3>
+                    <div className="col-span-12 md:col-span-7">
+                      <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground mb-1">
+                        {o.startup_name}
+                      </p>
+                      <h3 className="font-serif text-xl font-bold leading-tight group-hover:text-accent transition-colors">
+                        {o.role_title}
+                      </h3>
+                      <div className="flex flex-wrap gap-4 text-xs text-muted-foreground mt-3">
                         {o.type && (
-                          <Badge variant="outline" className="text-[10px] font-normal">
+                          <span className="text-[10px] font-mono uppercase tracking-widest border border-foreground/15 px-2 py-1">
                             {typeLabels[o.type] || o.type}
-                          </Badge>
+                          </span>
                         )}
                         {o.stage && (
-                          <Badge variant="secondary" className="text-[10px] font-normal">
-                            {o.stage}
-                          </Badge>
+                          <span className="flex items-center gap-1.5">
+                            <Rocket className="h-3 w-3" /> {o.stage}
+                          </span>
                         )}
-                      </div>
-                      <p className="text-sm text-muted-foreground mt-0.5">{o.startup_name}</p>
-                      <div className="flex flex-wrap gap-3 text-xs text-muted-foreground mt-2">
                         {o.location && (
-                          <span className="flex items-center gap-1"><MapPin className="h-3 w-3" /> {o.location}</span>
+                          <span className="flex items-center gap-1.5">
+                            <MapPin className="h-3 w-3" /> {o.location}
+                          </span>
                         )}
                         {o.stipend_salary && (
-                          <span className="flex items-center gap-1"><Banknote className="h-3 w-3" /> {o.stipend_salary}</span>
+                          <span className="flex items-center gap-1.5">
+                            <Banknote className="h-3 w-3" /> {o.stipend_salary}
+                          </span>
                         )}
-                        {o.sector && (
-                          <span className="flex items-center gap-1"><Rocket className="h-3 w-3" /> {o.sector}</span>
-                        )}
-                        <span>Posted {formatDistanceToNow(new Date(o.posted_at), { addSuffix: true })}</span>
+                        <span>
+                          Posted {formatDistanceToNow(new Date(o.posted_at), { addSuffix: true })}
+                        </span>
                       </div>
                     </div>
 
-                    {/* Right: Action */}
-                    <div className="shrink-0">
+                    <div className="col-span-12 md:col-span-3 flex md:justify-end">
                       {o.apply_link ? (
                         <a href={o.apply_link} target="_blank" rel="noopener noreferrer">
-                          <Button size="sm" className="h-9 text-xs gap-1.5 rounded-lg">
-                            Apply <ExternalLink className="h-3 w-3" />
+                          <Button
+                            size="sm"
+                            className="h-10 px-5 bg-primary text-primary-foreground hover:bg-accent hover:text-accent-foreground rounded-none text-[11px] uppercase tracking-[0.2em] font-medium"
+                          >
+                            Apply <ArrowUpRight className="h-3 w-3 ml-1.5" />
                           </Button>
                         </a>
                       ) : (
-                        <Button size="sm" disabled variant="secondary" className="h-9 text-xs opacity-70 rounded-lg">
+                        <span className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
                           Closed
-                        </Button>
+                        </span>
                       )}
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-muted rounded-lg bg-muted/5">
-                <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center mb-4">
-                  <Filter className="h-6 w-6 text-muted-foreground" />
-                </div>
-                <h3 className="text-lg font-medium mb-1">No openings found</h3>
-                <p className="text-sm text-muted-foreground">Try adjusting your filters to see more results.</p>
-                <Button 
-                  variant="link" 
-                  onClick={() => { setSector('All'); setType('All'); setStage('All'); }}
-                  className="mt-2 text-primary"
+              <div className="flex flex-col items-center justify-center py-20 border border-dashed border-foreground/15">
+                <Briefcase className="h-6 w-6 text-muted-foreground mb-3" />
+                <h3 className="font-serif text-xl font-bold mb-1">No roles found</h3>
+                <p className="text-sm text-muted-foreground">Try adjusting your filters.</p>
+                <Button
+                  variant="link"
+                  onClick={() => {
+                    setSector('All');
+                    setType('All');
+                    setStage('All');
+                  }}
+                  className="mt-2 text-accent"
                 >
                   Clear all filters
                 </Button>
@@ -173,7 +213,13 @@ export default function StartupOpenings() {
   );
 }
 
-function FilterSelect({ label, options, value, onChange, labelMap }: {
+function FilterSelect({
+  label,
+  options,
+  value,
+  onChange,
+  labelMap,
+}: {
   label: string;
   options: string[];
   value: string;
@@ -182,11 +228,11 @@ function FilterSelect({ label, options, value, onChange, labelMap }: {
 }) {
   return (
     <div className="space-y-2">
-      <label className="text-xs font-semibold tracking-wider uppercase text-foreground/70">
+      <label className="text-[10px] font-mono uppercase tracking-[0.25em] text-muted-foreground">
         {label}
       </label>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="w-full bg-background border-input hover:bg-accent hover:text-accent-foreground transition-colors">
+        <SelectTrigger className="w-full bg-transparent border-0 border-b border-foreground/20 rounded-none h-10 px-0 hover:border-accent transition-colors focus:ring-0">
           <SelectValue placeholder={`Select ${label}`} />
         </SelectTrigger>
         <SelectContent>
