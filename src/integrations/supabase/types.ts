@@ -156,6 +156,7 @@ export type Database = {
           id: string
           location: string | null
           registration_link: string | null
+          summary: string | null
           title: string
           updated_at: string
         }
@@ -166,6 +167,7 @@ export type Database = {
           id?: string
           location?: string | null
           registration_link?: string | null
+          summary?: string | null
           title: string
           updated_at?: string
         }
@@ -176,6 +178,7 @@ export type Database = {
           id?: string
           location?: string | null
           registration_link?: string | null
+          summary?: string | null
           title?: string
           updated_at?: string
         }
@@ -259,6 +262,14 @@ export type Database = {
       initiatives: {
         Row: {
           created_at: string
+          cadence: string | null
+          eligibility: string | null
+          format: string | null
+          held: string | null
+          mode: string | null
+          outcomes: string | null
+          overview: string | null
+          partners: string | null
           description: string | null
           display_order: number | null
           id: string
@@ -270,6 +281,14 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          cadence?: string | null
+          eligibility?: string | null
+          format?: string | null
+          held?: string | null
+          mode?: string | null
+          outcomes?: string | null
+          overview?: string | null
+          partners?: string | null
           description?: string | null
           display_order?: number | null
           id?: string
@@ -281,6 +300,14 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          cadence?: string | null
+          eligibility?: string | null
+          format?: string | null
+          held?: string | null
+          mode?: string | null
+          outcomes?: string | null
+          overview?: string | null
+          partners?: string | null
           description?: string | null
           display_order?: number | null
           id?: string
@@ -360,6 +387,66 @@ export type Database = {
         }
         Relationships: []
       }
+      opening_requests: {
+        Row: {
+          id: string
+          startup_name: string
+          website_url: string | null
+          role_title: string
+          type: string
+          location: string | null
+          stipend_salary: string | null
+          sector: string | null
+          stage: string | null
+          description: string
+          apply_link: string | null
+          contact_name: string
+          contact_role: string | null
+          contact_email: string
+          contact_phone: string | null
+          status: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          startup_name: string
+          website_url?: string | null
+          role_title: string
+          type: string
+          location?: string | null
+          stipend_salary?: string | null
+          sector?: string | null
+          stage?: string | null
+          description: string
+          apply_link?: string | null
+          contact_name: string
+          contact_role?: string | null
+          contact_email: string
+          contact_phone?: string | null
+          status?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          startup_name?: string
+          website_url?: string | null
+          role_title?: string
+          type?: string
+          location?: string | null
+          stipend_salary?: string | null
+          sector?: string | null
+          stage?: string | null
+          description?: string
+          apply_link?: string | null
+          contact_name?: string
+          contact_role?: string | null
+          contact_email?: string
+          contact_phone?: string | null
+          status?: string
+          created_at?: string
+        }
+        Relationships: []
+      }
       partners: {
         Row: {
           category: Database["public"]["Enums"]["partner_category"]
@@ -367,6 +454,7 @@ export type Database = {
           id: string
           logo_url: string | null
           name: string
+          show_on_home: boolean
           updated_at: string
         }
         Insert: {
@@ -375,6 +463,7 @@ export type Database = {
           id?: string
           logo_url?: string | null
           name: string
+          show_on_home?: boolean
           updated_at?: string
         }
         Update: {
@@ -383,13 +472,52 @@ export type Database = {
           id?: string
           logo_url?: string | null
           name?: string
+          show_on_home?: boolean
           updated_at?: string
+        }
+        Relationships: []
+      }
+      speaker_companies: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          id: string
+          is_active: boolean
+          logo_url: string
+          name: string
+          show_name: boolean
+          updated_at: string
+          website_url: string | null
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_active?: boolean
+          logo_url: string
+          name: string
+          show_name?: boolean
+          updated_at?: string
+          website_url?: string | null
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_active?: boolean
+          logo_url?: string
+          name?: string
+          show_name?: boolean
+          updated_at?: string
+          website_url?: string | null
         }
         Relationships: []
       }
       past_speakers: {
         Row: {
+          avatar_position: string | null
           avatar_url: string | null
+          companies: string | null
           created_at: string
           designation: string | null
           display_order: number | null
@@ -402,7 +530,9 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          avatar_position?: string | null
           avatar_url?: string | null
+          companies?: string | null
           created_at?: string
           designation?: string | null
           display_order?: number | null
@@ -415,7 +545,9 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          avatar_position?: string | null
           avatar_url?: string | null
+          companies?: string | null
           created_at?: string
           designation?: string | null
           display_order?: number | null

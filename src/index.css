@@ -4,23 +4,23 @@
 
 @layer base {
   :root {
-    /* Bone/Cream background — #F5F5EE */
-    --background: 60 33% 95%;
+    /* White background — #FFFFFF */
+    --background: 0 0% 100%;
     --foreground: 0 0% 7%;
 
-    --card: 60 33% 95%;
+    --card: 0 0% 100%;
     --card-foreground: 0 0% 7%;
 
-    --popover: 60 33% 95%;
+    --popover: 0 0% 100%;
     --popover-foreground: 0 0% 7%;
 
     --primary: 0 0% 7%;
-    --primary-foreground: 60 33% 95%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 50 20% 90%;
+    --secondary: 0 0% 96%;
     --secondary-foreground: 0 0% 7%;
 
-    --muted: 50 20% 90%;
+    --muted: 0 0% 96%;
     --muted-foreground: 0 0% 40%;
 
     --accent: 193 100% 39%;
@@ -29,17 +29,17 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 0 0% 7%;
+    --border: 0 0% 90%;
     --input: 0 0% 80%;
-    --ring: 193 100% 39%;
+    --ring: 0 0% 45%;
 
-    --radius: 0px;
+    --radius: 0.5rem;
 
-    --sidebar-background: 60 33% 95%;
+    --sidebar-background: 0 0% 100%;
     --sidebar-foreground: 0 0% 7%;
     --sidebar-primary: 0 0% 7%;
-    --sidebar-primary-foreground: 60 33% 95%;
-    --sidebar-accent: 50 20% 90%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 0 0% 96%;
     --sidebar-accent-foreground: 0 0% 7%;
     --sidebar-border: 0 0% 7%;
     --sidebar-ring: 193 100% 39%;
@@ -70,9 +70,9 @@
     --destructive: 0 62% 31%;
     --destructive-foreground: 60 33% 95%;
 
-    --border: 0 0% 30%;
+    --border: 0 0% 24%;
     --input: 0 0% 30%;
-    --ring: 193 100% 39%;
+    --ring: 0 0% 65%;
   }
 }
 
@@ -83,10 +83,15 @@
 
   body {
     @apply bg-background text-foreground font-sans;
+    font-feature-settings: "kern" 1, "liga" 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-sans;
+    @apply font-serif;
+    font-weight: 600;
+    letter-spacing: -0.015em;
   }
 }
 

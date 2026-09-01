@@ -1,0 +1,10 @@
+DELETE FROM public.partners WHERE name = 'Anantya Overseas';
+UPDATE public.partners SET logo_url = 'https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/wadhwani-foundation.png' WHERE name = 'Wadhwani Foundation';
+UPDATE public.partners SET logo_url = 'https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/paniit-alumni-india.png' WHERE name = 'PanIIT Alumni India';
+UPDATE public.partners SET logo_url = 'https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/blue-ocean-vp.png' WHERE name = 'Blue Ocean Venture Partners';
+UPDATE public.partners SET logo_url = 'https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/stpi.png' WHERE name = 'Software Technology Parks of India (STPI)';
+UPDATE public.partners SET logo_url = 'https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/rvei.png' WHERE name = 'RVEI — Research & Venture Enterprise Incubation';
+UPDATE public.partners SET logo_url = 'https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/uniqorn.png' WHERE name = 'Uniqorn Growth Partners';
+UPDATE public.partners SET logo_url = 'https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/karostartup.png' WHERE name = 'KaroStartup';
+UPDATE public.partners SET logo_url = 'https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/polygon-labs.png' WHERE name = 'Polygon Labs';
+UPDATE public.partners SET logo_url = 'https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/prime-venture-partners.png' WHERE name = 'Prime Ventures';

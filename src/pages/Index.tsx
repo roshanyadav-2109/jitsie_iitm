@@ -4,89 +4,149 @@ import { useGalleryImages } from '@/hooks/useGalleryImages';
 import { useCompanies } from '@/hooks/useCompanies';
 import { usePartners } from '@/hooks/usePartners';
 import { usePastSpeakers } from '@/hooks/usePastSpeakers';
+import { useSpeakerCompanies } from '@/hooks/useSpeakerCompanies';
+import LogoMarquee from '@/components/LogoMarquee';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ArrowRight, TrendingUp, Building2, Users } from 'lucide-react';
+import { RiArrowRightLine, RiMicLine, RiSeedlingLine, RiTeamLine } from 'react-icons/ri';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 
 export default function Index() {
   const { data: gallery, isLoading: galleryLoading } = useGalleryImages();
   const { data: companies } = useCompanies();
-  const { data: partners } = usePartners();
+  const { data: allPartners } = usePartners();
+  const partners = allPartners?.filter((p) => p.show_on_home);
   const { data: speakers } = usePastSpeakers();
+  const { data: speakerCompanies } = useSpeakerCompanies();
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [hoveredSpeaker, setHoveredSpeaker] = useState<string | null>(null);
 
   return (
     <Layout>
       {/* Section 1 — Hero */}
-      <section className="py-20 md:py-32 text-center border-b border-foreground/10">
-        {/* Changed max-w-4xl to max-w-6xl to allow the text to stay on one line */}
-        <div className="container max-w-6xl">
-          <p className="text-sm tracking-[0.3em] uppercase text-muted-foreground mb-6">
-            IIT Madras Startup Ecosystem
-          </p>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.9] tracking-tight">
-            Build the future.
-          </h1>
-          <p className="mt-8 text-lg md:text-xl italic text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            "The best way to predict the future is to create it. We back the founders who believe this."
-          </p>
-          <div className="mt-10 flex items-center justify-center gap-4">
-            <Link to="/companies">
-              <Button className="bg-foreground text-background hover:bg-foreground/90 px-6 h-11 text-sm">
-                Explore Startups <ArrowRight className="h-4 w-4 ml-1" />
-              </Button>
-            </Link>
-            <Link to="/openings">
-              <Button variant="outline" className="border-foreground px-6 h-11 text-sm">
-                View Open Roles
-              </Button>
-            </Link>
+      <section className="relative overflow-hidden">
+        <div className="container py-16 md:py-20 lg:py-24">
+          <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
+            <div className="lg:col-span-7 animate-in fade-in slide-in-from-bottom-4 duration-700">
+              {/* Two lines, so the type builds a block that can hold its own against the
+                  artwork instead of one long thin line. */}
+              <h1 className="font-serif text-[3.5rem] font-bold leading-[0.88] tracking-tight sm:text-7xl lg:text-[5.75rem]">
+                <span className="block">From campus</span>
+                <span className="block">to company</span>
+              </h1>
+
+              <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
+                <Link to="/companies" className="w-full sm:w-auto">
+                  <Button className="group w-full sm:w-auto bg-foreground text-background hover:bg-foreground/90 px-7 h-12 text-sm">
+                    Explore Startups
+                    <RiArrowRightLine className="ml-1.5 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  </Button>
+                </Link>
+                <Link
+                  to="/initiatives"
+                  className="inline-flex items-center text-sm font-medium text-foreground"
+                >
+                  View Initiatives
+                </Link>
+              </div>
+            </div>
+
+            <div className="relative flex justify-center lg:col-span-5 animate-in fade-in duration-1000">
+              {/* Wavy gel wash. The bottom is flush with the artwork's own bottom edge so
+                  the two end on the same line — otherwise the cut-out reads as chopped off
+                  above the wash. Sides bleed wider than the image so it is not a frame. */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -left-10 -right-10 bottom-0 h-[58%]"
+              >
+                <svg
+                  viewBox="0 0 640 340"
+                  preserveAspectRatio="none"
+                  className="h-full w-full overflow-visible"
+                >
+                  <defs>
+                    <linearGradient id="heroGel" x1="0" y1="0" x2="0.2" y2="1">
+                      <stop offset="0%" stopColor="hsl(150 70% 60%)" stopOpacity="0.35" />
+                      <stop offset="55%" stopColor="hsl(168 72% 50%)" stopOpacity="0.6" />
+                      <stop offset="100%" stopColor="hsl(186 78% 44%)" stopOpacity="0.8" />
+                    </linearGradient>
+                    <filter id="heroGelSoft" x="-30%" y="-30%" width="160%" height="160%">
+                      <feGaussianBlur stdDeviation="9" />
+                    </filter>
+                  </defs>
+
+                  {/* Wavy crest, sides drawn in, bottom running out to the artwork's baseline */}
+                  <path
+                    filter="url(#heroGelSoft)"
+                    fill="url(#heroGel)"
+                    d="M28,166 C104,66 204,192 326,128 C440,68 542,148 610,96 C630,164 638,268 628,340 L14,340 C2,276 6,214 28,166 Z"
+                  />
+                  {/* Highlight ripple, for the wet look */}
+                  <path
+                    fill="#ffffff"
+                    fillOpacity="0.22"
+                    d="M54,204 C152,140 252,240 368,190 C470,146 548,204 606,174 C562,220 472,186 368,232 C246,286 140,216 54,204 Z"
+                  />
+                </svg>
+              </div>
+
+              {/* Cut-out artwork, no frame or crop. f_auto,q_auto lets Cloudinary ship
+                  WebP/AVIF instead of the 2 MB source PNG. */}
+              <img
+                src="https://res.cloudinary.com/dkywjijpv/image/upload/f_auto,q_auto,w_1200/v1788278687/ac1cd6b7-1aae-40cd-9302-ddcc6dffc0c9_uxohgu.png"
+                alt=""
+                aria-hidden
+                width={1371}
+                height={1148}
+                className="relative z-10 block h-auto w-full max-w-[560px]"
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Section 2 — Stats Strip */}
-      <section className="border-b border-foreground/10 bg-accent text-accent-foreground">
-        <div className="container flex flex-col md:flex-row items-stretch justify-center">
-          {[
-            { icon: TrendingUp, label: 'Past Speakers', value: '20+' },
-            { icon: Building2, label: 'Startups Mentored', value: '200+' },
-            { icon: Users, label: 'Startup Founders', value: '800+' },
-          ].map((s, i) => (
-            <div
-              key={s.label}
-              className={`flex-1 py-8 px-8 text-center ${
-                i < 2 ? 'md:border-r md:border-accent-foreground/20' : ''
-              } ${i > 0 ? 'border-t md:border-t-0 border-accent-foreground/20' : ''}`}
-            >
-              <s.icon className="h-5 w-5 mx-auto mb-2 opacity-60" />
-              <div className="text-3xl md:text-4xl font-bold">{s.value}</div>
-              <div className="text-xs uppercase tracking-widest mt-2 opacity-60">{s.label}</div>
-            </div>
-          ))}
+      {/* Section 2 — Stats: icon, figure, label, in a tinted block inset from the page edges */}
+      <section className="py-12 md:py-16">
+        <div className="container">
+          <div className="rounded-lg bg-secondary/60 px-6 py-12 md:px-8 md:py-14 grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-8">
+            {[
+              { label: 'Past speakers', value: '20+', Icon: RiMicLine },
+              { label: 'Startups mentored', value: '200+', Icon: RiSeedlingLine },
+              { label: 'Startup founders', value: '3000+', Icon: RiTeamLine },
+            ].map(({ label, value, Icon }) => (
+              <div key={label}>
+                <Icon className="h-6 w-6 text-foreground" aria-hidden />
+                <div className="mt-5 font-sans font-bold tabular-nums leading-none tracking-tight text-4xl md:text-5xl">
+                  {value}
+                </div>
+                <div className="mt-3 text-sm text-muted-foreground">{label}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Section 3 — Partners Marquee */}
       {partners && partners.length > 0 && (
-        <section className="py-52 border-b border-foreground/10 overflow-hidden">
-          <div className="container mb-28 text-center">
+        <section className="py-20 md:py-24 overflow-hidden">
+          <div className="container mb-14 text-center">
             <h2 className="text-3xl md:text-5xl font-bold leading-tight">
               Together with our partners,<br />
               we build what's next.
             </h2>
           </div>
           <div className="relative">
-            <div className="marquee-track flex items-center gap-16">
+            <div className="marquee-track flex items-center gap-24">
               {[...partners, ...partners].map((p, i) => (
-                <div key={`${p.id}-${i}`} className="shrink-0 flex items-center justify-center h-16 w-32 grayscale hover:grayscale-0 transition-all opacity-60 hover:opacity-100">
-                  {p.logo_url ? (
-                    <img src={p.logo_url} alt={p.name} className="max-h-12 max-w-full object-contain" />
-                  ) : (
-                    <span className="text-sm font-bold text-muted-foreground">{p.name}</span>
+                <div key={`${p.id}-${i}`} className="shrink-0 flex w-64 flex-col items-center justify-end gap-4 transition-transform duration-300 hover:scale-105">
+                  {p.logo_url && (
+                    <div className="flex h-24 items-center justify-center">
+                      <img src={p.logo_url} alt="" className="max-h-24 max-w-full object-contain" />
+                    </div>
                   )}
+                  <span className="text-center text-base font-semibold leading-snug text-muted-foreground">
+                    {p.name}
+                  </span>
                 </div>
               ))}
             </div>
@@ -94,30 +154,84 @@ export default function Index() {
         </section>
       )}
 
-      {/* Section 4 — Initiatives CTA Banner */}
-      <section className="relative bg-accent text-accent-foreground overflow-hidden">
-        {/* Decorative geometric patterns */}
-        <svg className="absolute inset-0 w-full h-full opacity-10" xmlns="http://www.w3.org/2000/svg">
-          <line x1="10%" y1="0" x2="30%" y2="100%" stroke="currentColor" strokeWidth="1" />
-          <line x1="70%" y1="0" x2="90%" y2="100%" stroke="currentColor" strokeWidth="1" />
-          <line x1="50%" y1="0" x2="20%" y2="100%" stroke="currentColor" strokeWidth="1" />
-          <circle cx="80%" cy="30%" r="40" fill="none" stroke="currentColor" strokeWidth="1" />
-          <circle cx="15%" cy="70%" r="25" fill="none" stroke="currentColor" strokeWidth="1" />
-        </svg>
-        <div className="relative container py-20 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Looking for our cohorts?</h2>
-          <p className="text-base md:text-lg opacity-90 max-w-xl mx-auto mb-8">
-            We offer mentorships to emerging startups at every stage of innovation.
-          </p>
-          <Link to="/initiatives">
-            <Button className="bg-background text-foreground hover:bg-background/90 rounded-full px-8 h-11 text-sm font-medium">
-              Explore Initiatives
-            </Button>
-          </Link>
+      {/* Section 4 — Initiatives CTA, inset from the page edges like the stats block */}
+      <section className="py-6 md:py-10">
+        <div className="container">
+          <div className="relative overflow-hidden rounded-lg bg-accent text-accent-foreground">
+            {/* Decorative geometric patterns */}
+            <svg className="absolute inset-0 w-full h-full opacity-10" xmlns="http://www.w3.org/2000/svg">
+              <line x1="10%" y1="0" x2="30%" y2="100%" stroke="currentColor" strokeWidth="1" />
+              <line x1="70%" y1="0" x2="90%" y2="100%" stroke="currentColor" strokeWidth="1" />
+              <line x1="50%" y1="0" x2="20%" y2="100%" stroke="currentColor" strokeWidth="1" />
+              <circle cx="80%" cy="30%" r="40" fill="none" stroke="currentColor" strokeWidth="1" />
+              <circle cx="15%" cy="70%" r="25" fill="none" stroke="currentColor" strokeWidth="1" />
+            </svg>
+            <div className="relative px-6 py-16 md:px-12 md:py-20 text-center">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4">Looking for our cohorts?</h2>
+              <p className="text-base md:text-lg opacity-90 max-w-xl mx-auto mb-8">
+                We offer mentorships to emerging startups at every stage of innovation.
+              </p>
+              <Link to="/initiatives">
+                <Button className="bg-background text-foreground hover:bg-background/90 rounded-full px-8 h-11 text-sm font-medium">
+                  Explore Initiatives
+                </Button>
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* Section 5 — Gallery */}
+      {/* Section 5 — Past Speakers Marquee */}
+      {speakers && speakers.length > 0 && (
+        <section className="py-20 md:py-24">
+          <div className="container mb-10 text-center">
+            <h2 className="text-3xl md:text-4xl font-normal">Our Past Speakers</h2>
+          </div>
+          <div className="relative overflow-hidden">
+            <div className="marquee-track flex items-center gap-8">
+              {[...speakers, ...speakers].map((s, i) => (
+                <div
+                  key={`${s.id}-${i}`}
+                  className="shrink-0 relative w-72 h-96 rounded-[5px] overflow-hidden cursor-pointer"
+                  onMouseEnter={() => setHoveredSpeaker(`${s.id}-${i}`)}
+                  onMouseLeave={() => setHoveredSpeaker(null)}
+                >
+                  {s.avatar_url ? (
+                    <img
+                      src={s.avatar_url}
+                      alt={s.full_name}
+                      loading="lazy"
+                      style={s.avatar_position ? { objectPosition: s.avatar_position } : undefined}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="font-serif text-5xl font-semibold text-muted-foreground/30">{s.full_name[0]}</span>
+                    </div>
+                  )}
+                  <div
+                    className={`absolute inset-0 bg-gradient-to-t from-foreground/75 via-foreground/35 to-transparent rounded-[5px] flex flex-col justify-end p-6 transition-opacity duration-300 ${
+                      hoveredSpeaker === `${s.id}-${i}` ? 'opacity-100' : 'opacity-0'
+                    }`}
+                  >
+                    <p className="text-background font-serif font-semibold text-lg leading-tight">{s.full_name}</p>
+                    {s.designation && <p className="text-background/80 text-sm mt-1.5">{s.designation}</p>}
+                    {s.organization && <p className="text-background/70 text-sm">{s.organization}</p>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {speakerCompanies && speakerCompanies.length > 0 && (
+            <div className="container mt-14">
+              <LogoMarquee companies={speakerCompanies} />
+            </div>
+          )}
+        </section>
+      )}
+
+      {/* Section 6 — Gallery */}
       <section className="py-52">
         <div className="container">
           <div className="text-center mb-28">
@@ -128,25 +242,25 @@ export default function Index() {
           </div>
 
           {galleryLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <Skeleton key={i} className="aspect-[4/3] w-full" />
+            <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
+              {['aspect-[4/3]', 'aspect-[3/4]', 'aspect-[16/9]', 'aspect-[4/3]', 'aspect-[4/3]', 'aspect-[3/4]'].map((a, i) => (
+                <Skeleton key={i} className={`${a} w-full mb-4`} />
               ))}
             </div>
           ) : gallery && gallery.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
               {gallery.map((img) => (
                 <div
                   key={img.id}
-                  className="group relative overflow-hidden border border-foreground/10 bg-card"
+                  className="group relative overflow-hidden border border-foreground/10 bg-card mb-4 break-inside-avoid"
                   onMouseEnter={() => setHoveredId(img.id)}
                   onMouseLeave={() => setHoveredId(null)}
                 >
-                  <div className="aspect-[4/3] overflow-hidden">
+                  <div className="overflow-hidden">
                     <img
                       src={img.image_url}
                       alt={img.title || 'Gallery image'}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="w-full h-auto block transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"
                     />
                   </div>
@@ -167,43 +281,6 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Section 6 — Past Speakers Marquee */}
-      {speakers && speakers.length > 0 && (
-        <section className="py-16 bg-muted/50 border-t border-foreground/10">
-          <div className="container mb-10 text-center">
-            <h2 className="text-3xl md:text-4xl font-normal">Our Past Speakers</h2>
-          </div>
-          <div className="relative overflow-hidden">
-            <div className="marquee-track flex items-center gap-6">
-              {[...speakers, ...speakers].map((s, i) => (
-                <div
-                  key={`${s.id}-${i}`}
-                  className="shrink-0 relative w-48 h-60 rounded-2xl overflow-hidden bg-secondary cursor-pointer"
-                  onMouseEnter={() => setHoveredSpeaker(`${s.id}-${i}`)}
-                  onMouseLeave={() => setHoveredSpeaker(null)}
-                >
-                  {s.avatar_url ? (
-                    <img src={s.avatar_url} alt={s.full_name} className="w-full h-full object-cover" loading="lazy" />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-secondary">
-                      <span className="text-3xl font-bold text-muted-foreground/30">{s.full_name[0]}</span>
-                    </div>
-                  )}
-                  <div
-                    className={`absolute inset-0 bg-foreground/70 rounded-2xl flex flex-col justify-end p-4 transition-opacity duration-300 ${
-                      hoveredSpeaker === `${s.id}-${i}` ? 'opacity-100' : 'opacity-0'
-                    }`}
-                  >
-                    <p className="text-background font-bold text-sm">{s.full_name}</p>
-                    {s.designation && <p className="text-background/70 text-xs mt-0.5">{s.designation}</p>}
-                    {s.organization && <p className="text-background/60 text-xs">{s.organization}</p>}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
     </Layout>
   );
 }

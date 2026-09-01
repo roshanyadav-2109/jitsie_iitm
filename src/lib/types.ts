@@ -53,6 +53,7 @@ export interface Job {
 export interface Event {
   id: string;
   title: string;
+  summary: string | null;
   date_time: string;
   location: string | null;
   registration_link: string | null;
@@ -66,6 +67,7 @@ export interface Partner {
   name: string;
   logo_url: string | null;
   category: PartnerCategory;
+  show_on_home: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -95,6 +97,7 @@ export interface BoardMember {
   designation: string | null;
   bio: string | null;
   avatar_url: string | null;
+  avatar_position: string | null;
   linkedin_url: string | null;
   organization: string | null;
   display_order: number;
@@ -152,7 +155,9 @@ export interface PastSpeaker {
   full_name: string;
   designation: string | null;
   organization: string | null;
+  companies: string | null;
   avatar_url: string | null;
+  avatar_position: string | null;
   linkedin_url: string | null;
   topic: string | null;
   display_order: number;
@@ -165,6 +170,14 @@ export interface Initiative {
   id: string;
   title: string;
   description: string | null;
+  overview: string | null;
+  format: string | null;
+  cadence: string | null;
+  held: string | null;
+  mode: string | null;
+  eligibility: string | null;
+  partners: string | null;
+  outcomes: string | null;
   image_url: string | null;
   link: string | null;
   display_order: number;
@@ -181,6 +194,18 @@ export interface ExecutiveBoardMember {
   avatar_url: string | null;
   linkedin_url: string | null;
   organization: string | null;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SpeakerCompany {
+  id: string;
+  name: string;
+  logo_url: string;
+  show_name: boolean;
+  website_url: string | null;
   display_order: number;
   is_active: boolean;
   created_at: string;

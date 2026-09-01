@@ -1,14 +1,18 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
-import PageHeader from '@/components/PageHeader';
 import { useCompanies, useCompanyFilters } from '@/hooks/useCompanies';
 import { SkeletonCard } from '@/components/SkeletonCard';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Building2, ArrowUpRight, Filter } from 'lucide-react';
+import { RiBuilding2Line, RiArrowRightUpLine, RiFilter3Line } from 'react-icons/ri';
+import EmptyState from '@/components/EmptyState';
 import { Badge } from '@/components/ui/badge';
+
+/** Mentorship, incubation, idea nurture and grants all run through one application. */
+const SUPPORT_FORM =
+  'https://docs.google.com/forms/d/e/1FAIpQLSc1JwkeReLKI49yLfQLjCFfNI-ZWWNsqTOyWO1vvPcgb69OTQ/viewform';
 
 export default function Companies() {
   const [batch, setBatch] = useState('All');
@@ -26,15 +30,17 @@ export default function Companies() {
 
   return (
     <Layout>
-      <PageHeader title="Startup Directory" />
       <div className="container py-8 md:py-12">
+        <header className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-semibold leading-tight">Startup Directory</h1>
+        </header>
 
         <div className="flex flex-col md:flex-row gap-8 lg:gap-12">
           {/* SIDEBAR: Filters */}
           <aside className="w-full md:w-64 shrink-0 space-y-8">
-            <div className="sticky top-24">
+            <div className="sticky top-16">
               <div className="flex items-center gap-2 font-medium text-lg mb-6">
-                <Filter className="w-4 h-4" /> Filters
+                <RiFilter3Line className="w-4 h-4" /> Filters
               </div>
 
               <div className="space-y-6">
@@ -71,13 +77,29 @@ export default function Companies() {
                   </>
                 )}
               </div>
+
+              {/* Support routes, under the filters: the same application the
+                  announcement bar points at. */}
+              <div className="mt-10 rounded-lg bg-secondary/60 p-5">
+                <h2 className="text-base font-semibold leading-tight">Apply for support</h2>
+                <ul className="mt-3 space-y-1.5 text-sm text-muted-foreground">
+                  <li>Incubation support</li>
+                  <li>Idea nurture support</li>
+                  <li>Grants support</li>
+                </ul>
+                <a href={SUPPORT_FORM} target="_blank" rel="noopener noreferrer" className="mt-5 inline-block">
+                  <Button size="sm" className="h-9 px-4 text-xs">
+                    Apply now
+                  </Button>
+                </a>
+              </div>
             </div>
           </aside>
 
           {/* GRID: Companies */}
           <div className="flex-1 min-w-0">
             {isLoadingCompanies ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="space-y-4">
                 {Array.from({ length: 6 }).map((_, i) => (
                   <div key={i} className="bg-background border p-6 rounded-lg">
                     <SkeletonCard />
@@ -85,26 +107,23 @@ export default function Companies() {
                 ))}
               </div>
             ) : companies && companies.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="space-y-4">
                 {companies.map((c) => (
                   <Link
                     key={c.id}
                     to={`/companies/${c.slug}`}
-                    className="group relative bg-background border border-border p-6 rounded-lg hover:border-foreground/30 hover:shadow-sm transition-all flex flex-col h-full"
+                    className="group relative bg-background border border-border p-5 rounded-lg transition-all flex flex-col sm:flex-row sm:items-center gap-4"
                   >
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="h-12 w-12 border border-border rounded-md flex items-center justify-center bg-secondary/30 transition-colors group-hover:bg-secondary/50">
-                        {c.logo_url ? (
-                          <img src={c.logo_url} alt={c.name} className="h-8 w-8 object-contain" />
-                        ) : (
-                          <Building2 className="h-5 w-5 text-muted-foreground/70" />
-                        )}
-                      </div>
-                      <ArrowUpRight className="h-4 w-4 text-muted-foreground/50 opacity-0 -translate-y-1 translate-x-1 group-hover:opacity-100 group-hover:translate-y-0 group-hover:translate-x-0 transition-all duration-300" />
+                    <div className="h-12 w-12 border border-border rounded-md flex items-center justify-center bg-secondary/30 shrink-0">
+                      {c.logo_url ? (
+                        <img src={c.logo_url} alt={c.name} className="h-8 w-8 object-contain" />
+                      ) : (
+                        <RiBuilding2Line className="h-5 w-5 text-muted-foreground/70" />
+                      )}
                     </div>
-                    
-                    <div className="mb-2">
-                      <h3 className="font-serif font-bold text-lg group-hover:text-primary transition-colors">
+
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-serif font-bold text-lg leading-tight group-hover:text-primary transition-colors">
                         {c.name}
                       </h3>
                       {c.one_liner && (
@@ -114,7 +133,7 @@ export default function Companies() {
                       )}
                     </div>
 
-                    <div className="mt-auto pt-4 flex items-center gap-2 flex-wrap">
+                    <div className="shrink-0 flex items-center gap-2 flex-wrap">
                       {c.batch && (
                         <Badge variant="secondary" className="font-mono text-[10px] px-1.5 py-0 h-5">
                           {c.batch}
@@ -126,29 +145,27 @@ export default function Companies() {
                         </span>
                       )}
                       {c.status === 'acquired' && (
-                        <span className="text-[10px] uppercase font-bold tracking-wider text-green-600/80 ml-auto">
+                        <span className="text-[10px] uppercase font-bold tracking-wider text-green-600/80">
                           Acquired
                         </span>
                       )}
+                      <RiArrowRightUpLine className="h-4 w-4 text-muted-foreground/50 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300" />
                     </div>
                   </Link>
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center py-20 border-2 border-dashed border-muted rounded-lg bg-muted/5">
-                <div className="h-12 w-12 rounded-full bg-muted flex items-center justify-center mb-4">
-                  <Filter className="h-6 w-6 text-muted-foreground" />
-                </div>
-                <h3 className="font-serif text-lg font-medium mb-1">No companies found</h3>
-                <p className="text-sm text-muted-foreground">Try adjusting your filters.</p>
-                <Button 
-                  variant="link" 
-                  onClick={() => { setBatch('All'); setIndustry('All'); }}
-                  className="mt-2 text-primary"
-                >
-                  Clear all filters
-                </Button>
-              </div>
+              <EmptyState
+                title="No companies match those filters"
+                description="Nothing in the directory fits this combination yet. Drop a filter to widen the search."
+                emptyTitle="The directory is empty"
+                emptyDescription="No companies have been added yet. Once they are, they'll show up here."
+                filters={[
+                  { label: 'Batch', value: batch, onClear: () => setBatch('All') },
+                  { label: 'Industry', value: industry, onClear: () => setIndustry('All') },
+                ]}
+                onClearAll={() => { setBatch('All'); setIndustry('All'); }}
+              />
             )}
           </div>
         </div>
@@ -171,11 +188,11 @@ function FilterSelect({
 }) {
   return (
     <div className="space-y-2">
-      <label className="text-xs font-semibold tracking-wider uppercase text-foreground/70">
+      <label className="text-sm font-medium text-foreground">
         {label}
       </label>
       <Select value={value} onValueChange={onChange}>
-        <SelectTrigger className="w-full bg-background border-input hover:bg-accent hover:text-accent-foreground transition-colors">
+        <SelectTrigger className="w-full bg-background border-input">
           <SelectValue placeholder={`Select ${label}`} />
         </SelectTrigger>
         <SelectContent>

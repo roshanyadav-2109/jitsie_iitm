@@ -1,0 +1,12 @@
+UPDATE public.partners SET logo_url='https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/polygon-labs.png' WHERE name='Polygon Labs';
+INSERT INTO public.partners (name, logo_url, category) SELECT 'Polygon Labs','https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/polygon-labs.png','corporate' WHERE NOT EXISTS (SELECT 1 FROM public.partners WHERE name='Polygon Labs');
+UPDATE public.partners SET logo_url='https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/filecoin.png' WHERE name='Filecoin';
+INSERT INTO public.partners (name, logo_url, category) SELECT 'Filecoin','https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/filecoin.png','corporate' WHERE NOT EXISTS (SELECT 1 FROM public.partners WHERE name='Filecoin');
+UPDATE public.partners SET logo_url='https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/replit.png' WHERE name='Replit';
+INSERT INTO public.partners (name, logo_url, category) SELECT 'Replit','https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/replit.png','corporate' WHERE NOT EXISTS (SELECT 1 FROM public.partners WHERE name='Replit');
+UPDATE public.partners SET logo_url='https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/solana.png' WHERE name='Solana';
+INSERT INTO public.partners (name, logo_url, category) SELECT 'Solana','https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/solana.png','corporate' WHERE NOT EXISTS (SELECT 1 FROM public.partners WHERE name='Solana');
+UPDATE public.partners SET logo_url='https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/devfolio.png' WHERE name='Devfolio';
+INSERT INTO public.partners (name, logo_url, category) SELECT 'Devfolio','https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/devfolio.png','corporate' WHERE NOT EXISTS (SELECT 1 FROM public.partners WHERE name='Devfolio');
+UPDATE public.partners SET logo_url='https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/the-graph.png' WHERE name='The Graph';
+INSERT INTO public.partners (name, logo_url, category) SELECT 'The Graph','https://fpjkrxorovmknazwhdcw.supabase.co/storage/v1/object/public/public-assets/partners/the-graph.png','corporate' WHERE NOT EXISTS (SELECT 1 FROM public.partners WHERE name='The Graph');

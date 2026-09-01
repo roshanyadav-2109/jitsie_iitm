@@ -14,7 +14,23 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
+        // Hanken Grotesk for UI, Fraunces for headings and long-form. The licensed
+        // faces stay listed first so they win where they happen to be installed.
+        sans: [
+          "'Styrene B'",
+          "'Styrene A'",
+          "'Hanken Grotesk'",
+          "Inter",
+          "system-ui",
+          "sans-serif",
+        ],
+        serif: [
+          "Fraunces",
+          "Copernicus",
+          "'Tiempos Text'",
+          "Georgia",
+          "serif",
+        ],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -75,10 +91,30 @@ export default {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "marquee-ltr": {
+          from: { transform: "translateX(-50%)" },
+          to: { transform: "translateX(0)" },
+        },
+        sweep: {
+          from: { transform: "rotate(0deg)" },
+          to: { transform: "rotate(360deg)" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-10px)" },
+        },
+        "ring-out": {
+          "0%": { transform: "scale(0.55)", opacity: "0.55" },
+          "80%": { transform: "scale(1)", opacity: "0" },
+          "100%": { transform: "scale(1)", opacity: "0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "marquee-ltr": "marquee-ltr 40s linear infinite",
+        sweep: "sweep 4s linear infinite",
+        "ring-out": "ring-out 3s ease-out infinite",
       },
     },
   },

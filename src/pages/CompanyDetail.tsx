@@ -3,7 +3,7 @@ import Layout from '@/components/Layout';
 import { useCompanyBySlug } from '@/hooks/useCompanies';
 import { useJobsByCompany } from '@/hooks/useJobs';
 import { Skeleton } from '@/components/ui/skeleton';
-import { ExternalLink, ArrowUpRight, Building2, ArrowLeft } from 'lucide-react';
+import { RiExternalLinkLine, RiArrowRightUpLine, RiBuilding2Line, RiArrowLeftLine } from 'react-icons/ri';
 import { Button } from '@/components/ui/button';
 
 export default function CompanyDetail() {
@@ -28,7 +28,7 @@ export default function CompanyDetail() {
     return (
       <Layout>
         <div className="container py-20 text-center">
-          <Building2 className="h-10 w-10 mx-auto text-muted-foreground mb-4" />
+          <RiBuilding2Line className="h-10 w-10 mx-auto text-muted-foreground mb-4" />
           <h1 className="text-2xl font-serif font-bold">Company not found</h1>
           <Link to="/companies" className="text-accent text-sm hover:underline mt-3 inline-block">
             ← Back to directory
@@ -40,12 +40,12 @@ export default function CompanyDetail() {
 
   return (
     <Layout>
-      <div className="container py-10 max-w-3xl">
+      <div className="container py-10 max-w-5xl">
         <Link
           to="/companies"
           className="text-xs text-muted-foreground hover:text-foreground mb-6 inline-flex items-center gap-1 transition-colors"
         >
-          <ArrowLeft className="h-3 w-3" /> Directory
+          <RiArrowLeftLine className="h-3 w-3" /> Directory
         </Link>
 
         {/* Header */}
@@ -54,7 +54,7 @@ export default function CompanyDetail() {
             {company.logo_url ? (
               <img src={company.logo_url} alt={company.name} className="h-10 w-10 object-contain" />
             ) : (
-              <Building2 className="h-6 w-6 text-muted-foreground" />
+              <RiBuilding2Line className="h-6 w-6 text-muted-foreground" />
             )}
           </div>
           <div>
@@ -79,7 +79,7 @@ export default function CompanyDetail() {
               rel="noopener noreferrer"
               className="text-[11px] border border-foreground/20 px-2 py-1 inline-flex items-center gap-1 hover:bg-secondary transition-colors"
             >
-              Website <ExternalLink className="h-2.5 w-2.5" />
+              Website <RiExternalLinkLine className="h-2.5 w-2.5" />
             </a>
           )}
         </div>
@@ -93,7 +93,7 @@ export default function CompanyDetail() {
 
         {/* Related Jobs */}
         {jobs && jobs.length > 0 && (
-          <div className="border-t border-foreground pt-8">
+          <div className="border-t border-border pt-8">
             <h2 className="text-xs uppercase tracking-widest text-muted-foreground mb-4">
               Open Positions ({jobs.length})
             </h2>
@@ -109,7 +109,7 @@ export default function CompanyDetail() {
                   {job.apply_link && (
                     <a href={job.apply_link} target="_blank" rel="noopener noreferrer">
                       <Button size="sm" className="h-7 px-3 text-xs bg-foreground text-background hover:bg-foreground/90">
-                        Apply <ArrowUpRight className="h-3 w-3 ml-0.5" />
+                        Apply <RiArrowRightUpLine className="h-3 w-3 ml-0.5" />
                       </Button>
                     </a>
                   )}

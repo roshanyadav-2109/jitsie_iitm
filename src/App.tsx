@@ -14,6 +14,8 @@ import Events from "./pages/Events";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import StartupOpenings from "./pages/StartupOpenings";
+import Membership from "./pages/Membership";
+import PostOpening from "./pages/PostOpening";
 import PastSpeakers from "./pages/PastSpeakers";
 import NotFound from "./pages/NotFound";
 
@@ -36,6 +38,8 @@ const App = () => (
             <Route path="/speakers" element={<PastSpeakers />} />
             <Route path="/leadership" element={<Team />} />
             <Route path="/events" element={<Events />} />
+            <Route path="/membership" element={<Membership />} />
+            <Route path="/post-opening" element={<PostOpening />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="*" element={<NotFound />} />
