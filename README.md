@@ -1,73 +1,91 @@
-# Welcome to your Lovable project
+# JITSIE — IIT Madras
 
-## Project info
+The website of the **Jamsetji Tata Society for Innovation and Entrepreneurship** at IIT Madras: the startup directory, the openings board, initiatives, past speakers, events and leadership.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Stack
 
-## How can I edit this code?
+| | |
+|---|---|
+| Framework | React 18 + Vite |
+| Language | TypeScript |
+| Styling | Tailwind CSS, shadcn/ui (Radix primitives) |
+| Data | Supabase (Postgres, Storage, Edge Functions) |
+| Server state | TanStack Query |
+| Routing | React Router |
+| Tests | Vitest |
+| Hosting | Vercel |
 
-There are several ways of editing your application.
+Type is Fraunces for headings and long-form, Hanken Grotesk for UI.
 
-**Use Lovable**
+## Running locally
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
+Requires Node.js 18+.
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+npm install
+npm run dev        # http://localhost:8080
 ```
 
-**Edit a file directly in GitHub**
+Other scripts:
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```sh
+npm run build      # production build to dist/
+npm run preview    # serve the build locally
+npm run test       # vitest
+npm run lint       # eslint
+```
 
-**Use GitHub Codespaces**
+## Environment
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Copy the keys into a `.env` at the project root:
 
-## What technologies are used for this project?
+```
+VITE_SUPABASE_URL=https://<project-ref>.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=<anon key>
+VITE_SUPABASE_PROJECT_ID=<project-ref>
+```
 
-This project is built with:
+Only the anon key belongs here — it ships to the browser. Anything privileged (service role keys, mail credentials) goes in Supabase function secrets, never in this file.
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Structure
 
-## How can I deploy this project?
+```
+src/
+  pages/          one file per route
+  components/     shared UI; components/ui is shadcn
+  hooks/          one hook per table, wrapping TanStack Query
+  integrations/   Supabase client and generated types
+  lib/            types and small helpers
+supabase/
+  migrations/     schema and content changes, applied in filename order
+  functions/      edge functions
+```
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+Pages read through the hooks in `src/hooks`; each one owns a single query and returns typed rows from `src/lib/types.ts`.
 
-## Can I connect a custom domain to my Lovable project?
+## Content
 
-Yes, you can!
+Almost everything on the site is data, not markup — startups, openings, gallery images, speakers, partners, initiatives and events all come from Supabase. Editing content means writing a migration, not changing a component.
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+Images live in the `public-assets` Storage bucket rather than being hotlinked from Drive, LinkedIn or a CDN, so nothing breaks when a share link expires.
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Database
+
+Migrations are plain SQL, named `<timestamp>_<what_it_does>.sql`, applied in order. Add a new file rather than editing an old one — the applied ones are already in production.
+
+Row-level security is on for every table: public read, admin write. Two exceptions worth knowing:
+
+- `opening_requests` accepts an insert from anyone, so a founder can submit a hiring request without an account. A `CHECK` constraint requires the contact address to be an `iitm.ac.in` one (sub-domains included).
+- `image_gallery`, `companies` and the rest are read-only to the public.
+
+## Hiring requests
+
+A startup posts a role at `/post-opening`. The request is written to `opening_requests` first, then the `notify-opening-request` edge function emails it to the JITSIE inbox. Saving before sending means a delivery failure never loses a submission.
+
+The function needs `RESEND_API_KEY` in the project's function secrets. Without it the form still records requests; only the email is skipped.
+
+## Deploying
+
+Vercel builds on push to `main`. `vercel.json` rewrites all routes to `index.html` for client-side routing.
+
+Database changes are applied separately from the code deploy — a migration takes effect as soon as it runs against the project, whether or not the site has been rebuilt.
