@@ -6,8 +6,8 @@ export function useCompanies(filters?: { batch?: string; industry?: string }) {
   return useQuery({
     queryKey: ['companies', filters],
     queryFn: async () => {
-      let q = supabase.from('companies').select('*').order('name', { ascending: true });
-      
+      let q = supabase.from('companies').select('*').eq('is_listed', true).order('name', { ascending: true });
+
       // Filter by Batch
       if (filters?.batch && filters.batch !== 'All') {
         q = q.eq('batch', filters.batch);
@@ -48,7 +48,8 @@ export function useCompanyFilters() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('companies')
-        .select('batch, industry');
+        .select('batch, industry')
+        .eq('is_listed', true);
 
       if (error) throw error;
 

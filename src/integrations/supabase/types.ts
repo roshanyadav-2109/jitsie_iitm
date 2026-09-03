@@ -100,6 +100,7 @@ export type Database = {
           founder_id: string | null
           id: string
           industry: string | null
+          is_listed: boolean
           logo_url: string | null
           name: string
           one_liner: string | null
@@ -115,6 +116,7 @@ export type Database = {
           founder_id?: string | null
           id?: string
           industry?: string | null
+          is_listed?: boolean
           logo_url?: string | null
           name: string
           one_liner?: string | null
@@ -130,6 +132,7 @@ export type Database = {
           founder_id?: string | null
           id?: string
           industry?: string | null
+          is_listed?: boolean
           logo_url?: string | null
           name?: string
           one_liner?: string | null

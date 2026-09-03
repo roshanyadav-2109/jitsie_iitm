@@ -32,6 +32,7 @@ export interface Company {
   status: CompanyStatus;
   founder_id: string | null;
   website_url: string | null;
+  is_listed: boolean;
   created_at: string;
   updated_at: string;
 }
