@@ -6,7 +6,7 @@ export function useCompanies(filters?: { batch?: string; industry?: string }) {
   return useQuery({
     queryKey: ['companies', filters],
     queryFn: async () => {
-      let q = supabase.from('companies').select('*').order('created_at', { ascending: false });
+      let q = supabase.from('companies').select('*').order('name', { ascending: true });
       
       // Filter by Batch
       if (filters?.batch && filters.batch !== 'All') {
