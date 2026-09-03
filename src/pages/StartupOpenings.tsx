@@ -17,6 +17,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { RiMapPin2Line, RiMoneyRupeeCircleLine, RiRocket2Line, RiExternalLinkLine, RiFilter3Line } from 'react-icons/ri';
 import EmptyState from '@/components/EmptyState';
 import { formatDistanceToNow } from 'date-fns';
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 const typeLabels: Record<string, string> = {
   intern: 'Intern',
@@ -26,6 +27,7 @@ const typeLabels: Record<string, string> = {
 };
 
 export default function StartupOpenings() {
+  usePageTitle("Openings");
   const [sector, setSector] = useState('All');
   const [type, setType] = useState('All');
   const [stage, setStage] = useState('All');

@@ -9,12 +9,18 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { RiBuilding2Line, RiArrowRightUpLine, RiFilter3Line } from 'react-icons/ri';
 import EmptyState from '@/components/EmptyState';
 import { Badge } from '@/components/ui/badge';
+import { usePageTitle } from "@/hooks/usePageTitle";
+import { cn } from '@/lib/utils';
+
+/** These brands only ship a white-on-transparent mark; give their tile a dark backing so it reads. */
+const DARK_TILE_LOGO_SLUGS = new Set(['astranex-defence']);
 
 /** Mentorship, incubation, idea nurture and grants all run through one application. */
 const SUPPORT_FORM =
   'https://docs.google.com/forms/d/e/1FAIpQLSc1JwkeReLKI49yLfQLjCFfNI-ZWWNsqTOyWO1vvPcgb69OTQ/viewform';
 
 export default function Companies() {
+  usePageTitle("Startups");
   const [batch, setBatch] = useState('All');
   const [industry, setIndustry] = useState('All');
   
@@ -114,11 +120,16 @@ export default function Companies() {
                     to={`/companies/${c.slug}`}
                     className="group relative bg-background border border-border p-5 rounded-lg transition-all flex flex-col sm:flex-row sm:items-center gap-4"
                   >
-                    <div className="h-12 w-12 border border-border rounded-md flex items-center justify-center bg-secondary/30 shrink-0">
+                    <div
+                      className={cn(
+                        'h-16 w-16 border border-border rounded-md flex items-center justify-center shrink-0 overflow-hidden p-1.5',
+                        DARK_TILE_LOGO_SLUGS.has(c.slug) ? 'bg-black' : 'bg-secondary/30'
+                      )}
+                    >
                       {c.logo_url ? (
-                        <img src={c.logo_url} alt={c.name} className="h-8 w-8 object-contain" />
+                        <img src={c.logo_url} alt={c.name} className="h-full w-full object-contain" />
                       ) : (
-                        <RiBuilding2Line className="h-5 w-5 text-muted-foreground/70" />
+                        <RiBuilding2Line className="h-6 w-6 text-muted-foreground/70" />
                       )}
                     </div>
 

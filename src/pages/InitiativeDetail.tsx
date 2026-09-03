@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import type { Partner } from '@/lib/types';
 import InitiativeFacts from '@/components/InitiativeFacts';
+import { usePageTitle } from '@/hooks/usePageTitle';
 
 /** Partner names are stored as a '·'-separated line; pair each with its logo when we have one. */
 function matchLogo(name: string, partners: Partner[] | undefined) {
@@ -21,6 +22,7 @@ export default function InitiativeDetail() {
   const { id } = useParams<{ id: string }>();
   const { data: initiative, isLoading } = useInitiativeDetail(id);
   const { data: partners } = usePartners();
+  usePageTitle(initiative?.title);
 
   if (isLoading) {
     return (

@@ -5,6 +5,7 @@ import { RiUser3Line } from 'react-icons/ri';
 import LinkedInIcon from '@/components/LinkedInIcon';
 import PersonAvatar from '@/components/PersonAvatar';
 import { Badge } from '@/components/ui/badge';
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 function PersonCard({ name, avatar, avatarPosition, designation, organization, linkedinUrl, bio, expertise, tag }: {
   name: string;
@@ -52,6 +53,7 @@ function PersonCard({ name, avatar, avatarPosition, designation, organization, l
 }
 
 export default function Team() {
+  usePageTitle("Team");
   const { data: boardMembers, isLoading: boardLoading } = useBoardMembers();
   const { data: advisors, isLoading: advisorsLoading } = useStartupAdvisors();
   const { data: execMembers, isLoading: execLoading } = useExecutiveBoard();

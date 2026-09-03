@@ -8,6 +8,7 @@ import { usePartners } from '@/hooks/usePartners';
 import { findLogos } from '@/lib/companyLogo';
 import { useSpeakerCompanies } from '@/hooks/useSpeakerCompanies';
 import type { PastSpeaker } from '@/lib/types';
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 function SpeakerCard({ speaker, logos }: { speaker: PastSpeaker; logos: { name: string; url: string }[] }) {
   return (
@@ -66,6 +67,7 @@ function SpeakerCard({ speaker, logos }: { speaker: PastSpeaker; logos: { name: 
 }
 
 export default function PastSpeakers() {
+  usePageTitle("Past Speakers");
   const { data: speakers, isLoading } = usePastSpeakers();
   const { data: companies } = useSpeakerCompanies();
   const { data: partners } = usePartners();

@@ -4,8 +4,10 @@ import { useInitiatives } from '@/hooks/useInitiatives';
 import { SkeletonCard } from '@/components/SkeletonCard';
 import { RiArrowRightLine } from 'react-icons/ri';
 import { Button } from '@/components/ui/button';
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function Initiatives() {
+  usePageTitle("Initiatives");
   const { data: initiatives, isLoading } = useInitiatives();
 
   return (

@@ -8,6 +8,7 @@ import { RiCalendarEventLine, RiArrowRightUpLine, RiMapPin2Line, RiTimeLine } fr
 import type { Event } from '@/lib/types';
 import EmptyEvents from '@/components/EmptyEvents';
 import PastEvents from '@/components/PastEvents';
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 function EventRow({ event }: { event: Event }) {
   const when = new Date(event.date_time);
@@ -57,6 +58,7 @@ function EventRow({ event }: { event: Event }) {
 }
 
 export default function Events() {
+  usePageTitle("Events");
   const { data: events, isLoading } = useEvents();
 
   const upcoming = events?.filter((e) => !isPast(new Date(e.date_time))) ?? [];

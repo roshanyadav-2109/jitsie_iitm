@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { RiArrowLeftLine } from 'react-icons/ri';
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 /** The board serves the IIT Madras ecosystem, so the requester must be reachable there. */
 const IITM_EMAIL = /@([a-z0-9-]+\.)*iitm\.ac\.in$/i;
@@ -32,6 +33,7 @@ const EMPTY = {
 type Form = typeof EMPTY;
 
 export default function PostOpening() {
+  usePageTitle("Request Hiring");
   const [form, setForm] = useState<Form>(EMPTY);
   const [submitting, setSubmitting] = useState(false);
   const [emailError, setEmailError] = useState<string | null>(null);

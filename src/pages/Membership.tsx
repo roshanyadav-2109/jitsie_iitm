@@ -1,4 +1,5 @@
 import Layout from '@/components/Layout';
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 /**
  * Membership sign-up. The form itself lives in Google Forms — embedding it keeps
@@ -12,6 +13,7 @@ const FORM_LINK =
   'https://docs.google.com/forms/d/e/1FAIpQLSe5e8p_TDfsQYURdayTOqX3WUpxa8BkFcIL3J4r1nHVjbxhjQ/viewform';
 
 export default function Membership() {
+  usePageTitle("Membership");
   return (
     <Layout>
       <section className="container py-10 md:py-14">

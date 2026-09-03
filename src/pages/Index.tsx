@@ -10,8 +10,10 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { RiArrowRightLine, RiMicLine, RiSeedlingLine, RiTeamLine } from 'react-icons/ri';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
+import { usePageTitle } from "@/hooks/usePageTitle";
 
 export default function Index() {
+  usePageTitle("Home");
   const { data: gallery, isLoading: galleryLoading } = useGalleryImages();
   const { data: companies } = useCompanies();
   const { data: allPartners } = usePartners();

@@ -5,11 +5,17 @@ import { useJobsByCompany } from '@/hooks/useJobs';
 import { Skeleton } from '@/components/ui/skeleton';
 import { RiExternalLinkLine, RiArrowRightUpLine, RiBuilding2Line, RiArrowLeftLine } from 'react-icons/ri';
 import { Button } from '@/components/ui/button';
+import { usePageTitle } from '@/hooks/usePageTitle';
+import { cn } from '@/lib/utils';
+
+/** These brands only ship a white-on-transparent mark; give their tile a dark backing so it reads. */
+const DARK_TILE_LOGO_SLUGS = new Set(['astranex-defence']);
 
 export default function CompanyDetail() {
   const { slug } = useParams<{ slug: string }>();
   const { data: company, isLoading } = useCompanyBySlug(slug || '');
   const { data: jobs } = useJobsByCompany(company?.id || '');
+  usePageTitle(company?.name);
 
   if (isLoading) {
     return (
@@ -50,7 +56,12 @@ export default function CompanyDetail() {
 
         {/* Header */}
         <div className="flex items-start gap-5 mb-8">
-          <div className="h-14 w-14 border border-foreground/10 flex items-center justify-center bg-secondary/50 shrink-0">
+          <div
+            className={cn(
+              'h-14 w-14 border border-foreground/10 flex items-center justify-center shrink-0',
+              DARK_TILE_LOGO_SLUGS.has(company.slug) ? 'bg-black' : 'bg-secondary/50'
+            )}
+          >
             {company.logo_url ? (
               <img src={company.logo_url} alt={company.name} className="h-10 w-10 object-contain" />
             ) : (
