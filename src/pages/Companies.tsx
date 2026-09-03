@@ -122,7 +122,7 @@ export default function Companies() {
                   >
                     <div
                       className={cn(
-                        'h-16 w-16 border border-border rounded-md flex items-center justify-center shrink-0 overflow-hidden p-0.5',
+                        'h-16 w-16 border border-border rounded-md flex items-center justify-center shrink-0 overflow-hidden p-1',
                         DARK_TILE_LOGO_SLUGS.has(c.slug) ? 'bg-black' : 'bg-secondary/30'
                       )}
                     >

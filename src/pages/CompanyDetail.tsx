@@ -58,7 +58,7 @@ export default function CompanyDetail() {
         <div className="flex items-start gap-5 mb-8">
           <div
             className={cn(
-              'h-14 w-14 border border-foreground/10 flex items-center justify-center shrink-0 overflow-hidden p-0.5',
+              'h-14 w-14 border border-foreground/10 flex items-center justify-center shrink-0 overflow-hidden p-1',
               DARK_TILE_LOGO_SLUGS.has(company.slug) ? 'bg-black' : 'bg-secondary/50'
             )}
           >
