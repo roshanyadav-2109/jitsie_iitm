@@ -6,6 +6,7 @@ import { usePartners } from '@/hooks/usePartners';
 import { usePastSpeakers } from '@/hooks/usePastSpeakers';
 import { useSpeakerCompanies } from '@/hooks/useSpeakerCompanies';
 import LogoMarquee from '@/components/LogoMarquee';
+import GalleryMarqueeRows from '@/components/GalleryMarqueeRows';
 import { Skeleton } from '@/components/ui/skeleton';
 import { RiArrowRightLine, RiMicLine, RiSeedlingLine, RiTeamLine } from 'react-icons/ri';
 import { Button } from '@/components/ui/button';
@@ -29,16 +30,17 @@ export default function Index() {
       <section className="relative overflow-hidden">
         <div className="container py-16 md:py-20 lg:py-24">
           <div className="grid items-center gap-10 lg:grid-cols-12 lg:gap-14">
-            <div className="lg:col-span-7 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <div className="flex flex-col items-center text-center sm:items-start sm:text-left lg:col-span-7 animate-in fade-in slide-in-from-bottom-4 duration-700">
               {/* Two lines, so the type builds a block that can hold its own against the
-                  artwork instead of one long thin line. */}
-              <h1 className="font-serif text-[3.5rem] font-bold leading-[0.88] tracking-tight sm:text-7xl lg:text-[5.75rem]">
+                  artwork instead of one long thin line. Centered on small screens only —
+                  left-aligned once there's room to sit beside the artwork. */}
+              <h1 className="font-serif text-[2.25rem] font-normal leading-[1.1] tracking-tight sm:text-7xl sm:leading-[0.9] lg:text-[5.75rem]">
                 <span className="block">From campus</span>
                 <span className="block">to company</span>
               </h1>
 
-              <div className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
-                <Link to="/companies" className="w-full sm:w-auto">
+              <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:items-center sm:gap-6">
+                <Link to="/companies" className="w-full max-w-xs sm:w-auto">
                   <Button className="group w-full sm:w-auto bg-foreground text-background hover:bg-foreground/90 px-7 h-12 text-sm">
                     Explore Startups
                     <RiArrowRightLine className="ml-1.5 h-4 w-4 transition-transform group-hover:translate-x-0.5" />
@@ -246,39 +248,55 @@ export default function Index() {
           </div>
 
           {galleryLoading ? (
-            <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
-              {['aspect-[4/3]', 'aspect-[3/4]', 'aspect-[16/9]', 'aspect-[4/3]', 'aspect-[4/3]', 'aspect-[3/4]'].map((a, i) => (
-                <Skeleton key={i} className={`${a} w-full mb-4`} />
-              ))}
-            </div>
+            <>
+              <div className="-mx-8 flex flex-col gap-3 px-4 sm:hidden">
+                {[0, 1, 2].map((row) => (
+                  <div key={row} className="flex gap-3">
+                    {[0, 1, 2].map((i) => (
+                      <Skeleton key={i} className="aspect-[4/3] w-44 shrink-0 rounded-lg" />
+                    ))}
+                  </div>
+                ))}
+              </div>
+              <div className="hidden sm:block sm:columns-2 sm:gap-4 lg:columns-3">
+                {['aspect-[4/3]', 'aspect-[3/4]', 'aspect-[16/9]', 'aspect-[4/3]', 'aspect-[4/3]', 'aspect-[3/4]'].map((a, i) => (
+                  <Skeleton key={i} className={`${a} w-full mb-4`} />
+                ))}
+              </div>
+            </>
           ) : gallery && gallery.length > 0 ? (
-            <div className="columns-1 sm:columns-2 lg:columns-3 gap-4">
-              {gallery.map((img) => (
-                <div
-                  key={img.id}
-                  className="group relative overflow-hidden border border-foreground/10 bg-card mb-4 break-inside-avoid"
-                  onMouseEnter={() => setHoveredId(img.id)}
-                  onMouseLeave={() => setHoveredId(null)}
-                >
-                  <div className="overflow-hidden">
-                    <img
-                      src={img.image_url}
-                      alt={img.title || 'Gallery image'}
-                      className="w-full h-auto block transition-transform duration-500 group-hover:scale-105"
-                      loading="lazy"
-                    />
-                  </div>
+            <>
+              <div className="-mx-8 px-4 sm:hidden">
+                <GalleryMarqueeRows images={gallery} />
+              </div>
+              <div className="hidden sm:block sm:columns-2 sm:gap-4 lg:columns-3">
+                {gallery.map((img) => (
                   <div
-                    className={`absolute inset-0 bg-foreground/60 flex flex-col justify-end p-5 transition-opacity duration-300 ${
-                      hoveredId === img.id ? 'opacity-100' : 'opacity-0'
-                    }`}
+                    key={img.id}
+                    className="group relative overflow-hidden border border-foreground/10 bg-card mb-4 break-inside-avoid"
+                    onMouseEnter={() => setHoveredId(img.id)}
+                    onMouseLeave={() => setHoveredId(null)}
                   >
-                    {img.title && <h3 className="text-background font-bold text-lg leading-tight">{img.title}</h3>}
-                    {img.caption && <p className="text-background/70 text-sm mt-1 leading-relaxed">{img.caption}</p>}
+                    <div className="overflow-hidden">
+                      <img
+                        src={img.image_url}
+                        alt={img.title || 'Gallery image'}
+                        className="w-full h-auto block transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div
+                      className={`absolute inset-0 bg-foreground/60 flex flex-col justify-end p-5 transition-opacity duration-300 ${
+                        hoveredId === img.id ? 'opacity-100' : 'opacity-0'
+                      }`}
+                    >
+                      {img.title && <h3 className="text-background font-bold text-lg leading-tight">{img.title}</h3>}
+                      {img.caption && <p className="text-background/70 text-sm mt-1 leading-relaxed">{img.caption}</p>}
+                    </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </>
           ) : (
             <p className="text-muted-foreground text-sm py-8 text-center">No gallery images yet.</p>
           )}
