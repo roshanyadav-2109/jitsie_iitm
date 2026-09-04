@@ -138,15 +138,18 @@ export default function Index() {
             </h2>
           </div>
           <div className="relative">
-            <div className="marquee-track flex items-center gap-24">
+            <div className="marquee-track flex items-center gap-10 sm:gap-16 md:gap-24">
               {[...partners, ...partners].map((p, i) => (
-                <div key={`${p.id}-${i}`} className="shrink-0 flex w-64 flex-col items-center justify-end gap-4 transition-transform duration-300 hover:scale-105">
+                <div
+                  key={`${p.id}-${i}`}
+                  className="flex w-40 shrink-0 flex-col items-center justify-end gap-3 transition-transform duration-300 hover:scale-105 sm:w-52 sm:gap-4 md:w-64"
+                >
                   {p.logo_url && (
-                    <div className="flex h-24 items-center justify-center">
-                      <img src={p.logo_url} alt="" className="max-h-24 max-w-full object-contain" />
+                    <div className="flex h-14 items-center justify-center sm:h-20 md:h-24">
+                      <img src={p.logo_url} alt="" className="max-h-14 max-w-full object-contain sm:max-h-20 md:max-h-24" />
                     </div>
                   )}
-                  <span className="text-center text-base font-semibold leading-snug text-muted-foreground">
+                  <span className="text-center text-sm font-semibold leading-snug text-muted-foreground sm:text-base">
                     {p.name}
                   </span>
                 </div>
@@ -234,13 +237,12 @@ export default function Index() {
       )}
 
       {/* Section 6 — Gallery */}
-      <section className="py-52">
+      <section className="py-16 md:py-24 lg:py-32">
         <div className="container">
-          <div className="text-center mb-28">
+          <div className="text-center mb-10 md:mb-16">
             <h2 className="text-3xl md:text-5xl font-bold leading-tight">
               Emerging from India, directing the world
             </h2>
-            <p className="text-muted-foreground mt-4 text-lg">Viewing our ecosystem</p>
           </div>
 
           {galleryLoading ? (
