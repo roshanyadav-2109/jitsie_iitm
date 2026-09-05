@@ -17,17 +17,17 @@ interface StickyMobileCtaProps {
  */
 export default function StickyMobileCta({ title, description, buttonLabel, href, external }: StickyMobileCtaProps) {
   const button = (
-    <Button size="sm" className="h-9 shrink-0 px-4 text-xs">
+    <Button size="sm" className="h-9 shrink-0 bg-background px-4 text-xs text-foreground hover:bg-background/90">
       {buttonLabel}
     </Button>
   );
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 px-4 py-3 backdrop-blur md:hidden">
+    <div className="fixed inset-x-0 bottom-0 z-40 bg-foreground px-4 py-3 text-background md:hidden">
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
           <p className="truncate text-sm font-semibold leading-tight">{title}</p>
-          <p className="truncate text-xs text-muted-foreground">{description}</p>
+          <p className="truncate text-xs text-background/70">{description}</p>
         </div>
         {external ? (
           <a href={href} target="_blank" rel="noopener noreferrer" className="shrink-0">
