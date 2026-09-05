@@ -11,6 +11,7 @@ import EmptyState from '@/components/EmptyState';
 import { Badge } from '@/components/ui/badge';
 import { usePageTitle } from "@/hooks/usePageTitle";
 import { cn } from '@/lib/utils';
+import StickyMobileCta from '@/components/StickyMobileCta';
 
 /** These brands only ship a white-on-transparent mark; give their tile a dark backing so it reads. */
 const DARK_TILE_LOGO_SLUGS = new Set(['astranex-defence']);
@@ -36,7 +37,7 @@ export default function Companies() {
 
   return (
     <Layout>
-      <div className="container py-8 md:py-12">
+      <div className="container pb-24 pt-8 md:py-12">
         <header className="mb-8">
           <h1 className="text-3xl md:text-4xl font-semibold leading-tight">Startup Directory</h1>
         </header>
@@ -85,8 +86,10 @@ export default function Companies() {
               </div>
 
               {/* Support routes, under the filters: the same application the
-                  announcement bar points at. */}
-              <div className="mt-10 rounded-lg bg-secondary/60 p-5">
+                  announcement bar points at. On mobile this becomes a fixed
+                  bottom bar instead (see StickyMobileCta below), since the
+                  sidebar stacks above the results and would otherwise bury it. */}
+              <div className="mt-10 hidden rounded-lg bg-secondary/60 p-5 md:block">
                 <h2 className="text-base font-semibold leading-tight">Apply for support</h2>
                 <ul className="mt-3 space-y-1.5 text-sm text-muted-foreground">
                   <li>Incubation support</li>
@@ -181,6 +184,14 @@ export default function Companies() {
           </div>
         </div>
       </div>
+
+      <StickyMobileCta
+        title="Apply for support"
+        description="Incubation, idea nurture and grants"
+        buttonLabel="Apply now"
+        href={SUPPORT_FORM}
+        external
+      />
     </Layout>
   );
 }

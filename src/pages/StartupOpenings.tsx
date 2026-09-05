@@ -18,6 +18,7 @@ import { RiMapPin2Line, RiMoneyRupeeCircleLine, RiRocket2Line, RiExternalLinkLin
 import EmptyState from '@/components/EmptyState';
 import { formatDistanceToNow } from 'date-fns';
 import { usePageTitle } from "@/hooks/usePageTitle";
+import StickyMobileCta from '@/components/StickyMobileCta';
 
 const typeLabels: Record<string, string> = {
   intern: 'Intern',
@@ -60,7 +61,7 @@ export default function StartupOpenings() {
 
   return (
     <Layout>
-      <section className="container py-8 md:py-12">
+      <section className="container pb-24 pt-8 md:py-12">
         <header className="mb-8">
           <h1 className="text-3xl md:text-4xl font-semibold leading-tight">Startup Openings</h1>
         </header>
@@ -99,8 +100,11 @@ export default function StartupOpenings() {
                 )}
               </div>
 
-              {/* The other side of this page's market, under the filters */}
-              <div className="mt-10 rounded-lg bg-secondary/60 p-5">
+              {/* The other side of this page's market, under the filters. On
+                  mobile this becomes a fixed bottom bar instead (see
+                  StickyMobileCta below), since the sidebar stacks above the
+                  results and would otherwise bury it. */}
+              <div className="mt-10 hidden rounded-lg bg-secondary/60 p-5 md:block">
                 <h2 className="text-base font-semibold leading-tight">A JITSIE startup?</h2>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   Hire from the community. Share the role and we will list it here.
@@ -205,6 +209,13 @@ export default function StartupOpenings() {
           </div>
         </div>
       </section>
+
+      <StickyMobileCta
+        title="A JITSIE startup?"
+        description="Post your opening to hire from the community"
+        buttonLabel="Post opening"
+        href="/post-opening"
+      />
     </Layout>
   );
 }
