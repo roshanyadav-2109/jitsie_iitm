@@ -42,11 +42,6 @@ export default function Footer() {
           {/* Identity */}
           <div className="md:col-span-4">
             <Logo variant="plain" className="text-white" />
-            <p className="mt-5 max-w-xs text-sm leading-relaxed text-white">
-              The Jamsetji Tata Society for Innovation and Entrepreneurship — the startup
-              ecosystem of IIT Madras, backing deep-tech founders building for India and the
-              world.
-            </p>
             <a
               href={`mailto:${CONTACT}`}
               className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-white underline-offset-4 hover:underline"
