@@ -115,7 +115,7 @@ export default function Footer() {
           <p className="text-white">
             © {new Date().getFullYear()} JITSIE, IIT Madras. All rights reserved.
           </p>
-          <p className="text-white">Chennai, India</p>
+          <p className="text-white">An IITM BS student-led society · Chennai, India</p>
         </div>
       </div>
     </footer>
